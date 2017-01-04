@@ -29,6 +29,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
@@ -150,6 +151,9 @@ public class LiteModFlyMod implements Tickable, RenderListener {
             player.setSneaking(false);
             player.capabilities.isFlying = true;
             player.sendPlayerAbilities();
+            if (dy < 0 && minecraft.world.isBlockNormalCube(new BlockPos(from.xCoord + dx, from.yCoord + dy - 1.0, from.zCoord + dz), false)) {
+                dy = 0.0;
+            }
             player.setPositionAndRotation(from.xCoord + dx, from.yCoord + dy, from.zCoord + dz, to.yaw, to.pitch);
         } else if (flying == 0 && !player.onGround) {
             player.fallDistance = 0.0f;
