@@ -1,0 +1,61 @@
+/*
+ * Copyright (C) 2017 MarkusWME
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = 'sponge'
+            url = 'http://repo.spongepowered.org/maven'
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.liteloader'
+
+version = "1.0"
+group = "at.pcgf.flymod"
+archivesBaseName = "flymod"
+
+minecraft {
+    version = "1.11"
+    mappings = "snapshot_20161120"
+    runDir = "run"
+}
+
+litemod {
+    json {
+        name = "flymod"
+        mcversion = "1.11"
+    }
+}
+
+jar {
+    from litemod.outputs
+}
