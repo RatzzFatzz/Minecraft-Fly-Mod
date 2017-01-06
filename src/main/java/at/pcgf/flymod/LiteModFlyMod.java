@@ -17,50 +17,30 @@
 
 package at.pcgf.flymod;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import com.mumfrey.liteloader.RenderListener;
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
-import com.mumfrey.liteloader.modconfig.ConfigStrategy;
-import com.mumfrey.liteloader.modconfig.ExposableOptions;
-import com.mumfrey.liteloader.util.Position;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.math.BlockPos;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 
 @SuppressWarnings("FieldCanBeLocal,SpellCheckingInspection,UnusedAssignment,unused")
-@ExposableOptions(strategy = ConfigStrategy.Versioned, filename = "flymod.json")
-public class LiteModFlyMod implements Tickable, RenderListener {
-    private static KeyBinding flyKey = new KeyBinding("key.flymod.fly", Keyboard.KEY_B, "key.categories.flymod");
+public class LiteModFlyMod implements Tickable {
+    public static KeyBinding flyKey = new KeyBinding(I18n.format("key.flymod.fly"), Keyboard.KEY_B, I18n.format("key.categories.flymod"));
 
-    private static byte flying = -1;
-    private static Minecraft minecraft = Minecraft.getMinecraft();
+    public static byte flying = -1;
+    public static Minecraft minecraft = Minecraft.getMinecraft();
 
-    private static int flyDownKey;
-    private static int flyUpKey;
-    private static int speedKey;
-    private static int backwardKey;
-    private static int forwardKey;
-    private static int leftKey;
-    private static int rightKey;
-
-    @Expose
-    @SerializedName("mouseControl")
-    private boolean mouseControl = true;
-
-    @Expose
-    @SerializedName("flySpeedMultiplier")
-    private int flySpeedMultiplier = 3;
-
-    @Expose
-    @SerializedName("runSpeedMultiplier")
-    private int runSpeedMultiplier = 2;
+    public static int flyDownKey;
+    public static int flyUpKey;
+    public static int speedKey;
+    public static int backwardKey;
+    public static int forwardKey;
+    public static int leftKey;
+    public static int rightKey;
+    public static FlyModConfig config;
 
     @Override
     public String getVersion() {
@@ -85,6 +65,8 @@ public class LiteModFlyMod implements Tickable, RenderListener {
         forwardKey = Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode();
         leftKey = Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode();
         rightKey = Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode();
+        config = new FlyModConfig();
+        LiteLoader.getInstance().registerExposable(config, null);
     }
 
     @Override
@@ -93,80 +75,6 @@ public class LiteModFlyMod implements Tickable, RenderListener {
             if (flyKey.isPressed()) {
                 flying = (byte)(flying > 0 ? 0 : 1);
             }
-        }
-    }
-
-    @Override
-    public void onRender() {
-        if (minecraft.inGameHasFocus && minecraft.currentScreen == null && Minecraft.isGuiEnabled()) {
-            movePlayer(minecraft.player, new Position(minecraft.player.prevPosX, minecraft.player.prevPosY, minecraft.player.prevPosZ, minecraft.player.prevRotationYaw, minecraft.player.prevRotationPitch), new Position(minecraft.player.posX, minecraft.player.posY, minecraft.player.posZ, minecraft.player.rotationYaw, minecraft.player.rotationPitch));
-        }
-    }
-
-    @Override
-    public void onRenderGui(GuiScreen currentScreen) {}
-
-    @Override
-    public void onSetupCameraTransform() {}
-
-    private void movePlayer(EntityPlayerSP player, Position from, Position to) {
-        double dx = to.xCoord - from.xCoord;
-        double dy = to.yCoord - from.yCoord;
-        double dz = to.zCoord - from.zCoord;
-        boolean speedEnabled = Keyboard.isKeyDown(speedKey);
-        if (flying > 0) {
-            dy = 0.0;
-            if (Keyboard.isKeyDown(flyDownKey)) {
-                dy -= 0.2f;
-            }
-            if (Keyboard.isKeyDown(flyUpKey)) {
-                dy += 0.2f;
-            }
-            double multiplier = speedEnabled ? 1.0 * flySpeedMultiplier : 1.0;
-            dx *= multiplier;
-            dy *= multiplier;
-            dz *= multiplier;
-            float pitch = Math.abs((float)(0.005f * multiplier) * player.rotationPitch);
-            if (mouseControl) {
-                if (Keyboard.isKeyDown(forwardKey)) {
-                    if (player.rotationPitch > 0) {
-                        dy -= pitch;
-                    } else if (player.rotationPitch < 0) {
-                        dy += pitch;
-                    }
-                } else if (Keyboard.isKeyDown(backwardKey)) {
-                    if (player.rotationPitch > 0) {
-                        dy += pitch;
-                    } else if (player.rotationPitch < 0) {
-                        dy -= pitch;
-                    }
-                }
-            }
-            player.fallDistance = 0.0f;
-            player.motionY = 0.0;
-            if (!(Keyboard.isKeyDown(backwardKey) || Keyboard.isKeyDown(forwardKey) || Keyboard.isKeyDown(leftKey) || Keyboard.isKeyDown(rightKey))) {
-                player.motionX = 0.0;
-                player.motionZ = 0.0;
-            }
-            player.setSneaking(false);
-            player.capabilities.isFlying = true;
-            player.sendPlayerAbilities();
-            if (dy < 0 && minecraft.world.isBlockNormalCube(new BlockPos(from.xCoord + dx, from.yCoord + dy - 1.0, from.zCoord + dz), false)) {
-                dy = 0.0;
-            }
-            player.setPositionAndRotation(from.xCoord + dx, from.yCoord + dy, from.zCoord + dz, to.yaw, to.pitch);
-        } else if (flying == 0 && !player.onGround) {
-            player.fallDistance = 0.0f;
-            if (!player.capabilities.isCreativeMode) {
-                player.capabilities.isFlying = false;
-                player.sendPlayerAbilities();
-            }
-        } else if (flying < 0 && player.onGround && speedEnabled) {
-            dx *= runSpeedMultiplier;
-            dz *= runSpeedMultiplier;
-            player.setPositionAndRotation(from.xCoord + dx, from.yCoord + dy, from.zCoord + dz, to.yaw, to.pitch);
-        } else {
-            flying = -1;
         }
     }
 }

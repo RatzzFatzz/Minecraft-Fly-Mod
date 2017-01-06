@@ -28,20 +28,25 @@ buildscript {
             url = "http://files.minecraftforge.net/maven"
         }
         maven {
-            name = 'sponge'
-            url = 'http://repo.spongepowered.org/maven'
+            name = "sponge"
+            url = "http://repo.spongepowered.org/maven"
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT"
+        classpath "org.spongepowered:mixingradle:0.4-SNAPSHOT"
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.liteloader'
+apply plugin: "net.minecraftforge.gradle.liteloader"
+apply plugin: "org.spongepowered.mixin"
 
 version = "1.0"
 group = "at.pcgf.flymod"
 archivesBaseName = "flymod"
+
+targetCompatibility = 1.8
+sourceCompatibility = 1.8
 
 minecraft {
     version = "1.11"
@@ -53,13 +58,22 @@ sourceSets {
     main {
         java.srcDir "src/main/java"
         resources.srcDir "src/main/resources"
+        refMap = "mixins.flymod.refmap.json"
     }
+}
+
+mixin {
+    defaultObfuscationEnv notch
 }
 
 litemod {
     json {
         name = "flymod"
         mcversion = "1.11"
+        version = "1.0"
+        author = "MarkusWME"
+        description = "This Mod allows you to enable a 3D fly and let you customize the fly and run speed."
+        mixinConfigs += "mixins.flymod.json"
     }
 }
 
