@@ -22,6 +22,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,6 +38,10 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
     public void move(MoverType type, double x, double y, double z) {
         boolean speedEnabled = Keyboard.isKeyDown(LiteModFlyMod.speedKey);
         if (LiteModFlyMod.flying > 0) {
+            boolean backwards = Keyboard.isKeyDown(LiteModFlyMod.backwardKey);
+            boolean forwards = Keyboard.isKeyDown(LiteModFlyMod.forwardKey);
+            boolean left = Keyboard.isKeyDown(LiteModFlyMod.leftKey);
+            boolean right = Keyboard.isKeyDown(LiteModFlyMod.rightKey);
             y = 0.0;
             if (Keyboard.isKeyDown(LiteModFlyMod.flyDownKey)) {
                 y -= 0.2f;
@@ -44,41 +49,52 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
             if (Keyboard.isKeyDown(LiteModFlyMod.flyUpKey)) {
                 y += 0.2f;
             }
-            double multiplier = speedEnabled ? 1.0 * LiteModFlyMod.config.flySpeedMultiplier : 1.0;
-            float verticalFly = 0.0f;
-            float pitch = Math.abs((float)(0.005f * multiplier) * rotationPitch);
-            if (LiteModFlyMod.config.mouseControl) {
-                if (moveForward > 0.01f) {
-                    if (rotationPitch > 0) {
-                        verticalFly -= pitch;
-                    } else if (rotationPitch < 0) {
-                        verticalFly += pitch;
-                    }
-                } else if (moveForward < -0.01f) {
-                    if (rotationPitch > 0) {
-                        verticalFly += pitch;
-                    } else if (rotationPitch < 0) {
-                        verticalFly -= pitch;
-                    }
-                }
-            }
-            x *= multiplier;
-            y *= multiplier;
-            z *= multiplier;
-            fallDistance = 0.0f;
-            motionY = 0.0;
             if (LiteModFlyMod.config.mouseControl && y == 0) {
-                y = verticalFly;
+                float yaw = rotationYaw;
+                if (forwards) {
+                    if (right) {
+                        yaw += 45.0f;
+                    } else if (left) {
+                        yaw += 315.0f;
+                    }
+                } else if (backwards) {
+                    if (right) {
+                        yaw += 135.0f;
+                    } else if (left) {
+                        yaw += 225.0f;
+                    } else {
+                        yaw += 180.0f;
+                    }
+                } else if (right) {
+                    yaw += 90.0f;
+                } else if (left) {
+                    yaw += 270.0f;
+                }
+                if (yaw > 180.0f) {
+                    yaw -= 360.0f;
+                }
+                Vec3d e = Vec3d.fromPitchYaw(rotationPitch, yaw).normalize();
+                double length = Math.sqrt((x * x) + (z * z));
+                x = e.xCoord * length;
+                y = e.yCoord * length;
+                z = e.zCoord * length;
             }
-            if (!(Keyboard.isKeyDown(LiteModFlyMod.backwardKey) || Keyboard.isKeyDown(LiteModFlyMod.forwardKey) || Keyboard.isKeyDown(LiteModFlyMod.leftKey) || Keyboard.isKeyDown(LiteModFlyMod.rightKey))) {
+            if (!(backwards || forwards || left || right)) {
                 motionX = 0.0;
                 motionZ = 0.0;
             }
+            fallDistance = 0.0f;
+            motionY = 0.0;
             setSneaking(false);
             capabilities.isFlying = true;
             sendPlayerAbilities();
+            float multiplier = speedEnabled ? 1.0f * LiteModFlyMod.config.flySpeedMultiplier : 1.0f;
+            x *= multiplier;
+            y *= multiplier;
+            z *= multiplier;
             super.move(type, x, y, z);
-        } else if (LiteModFlyMod.flying == 0 && !onGround) {
+        } else if (LiteModFlyMod.flying == 0) {
+            LiteModFlyMod.flying = -1;
             fallDistance = 0.0f;
             if (!capabilities.isCreativeMode) {
                 capabilities.isFlying = false;
@@ -89,7 +105,6 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
             z *= LiteModFlyMod.config.runSpeedMultiplier;
             super.move(type, x, y, z);
         } else {
-            LiteModFlyMod.flying = -1;
             super.move(type, x, y, z);
         }
     }

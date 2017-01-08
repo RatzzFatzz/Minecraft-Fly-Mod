@@ -17,10 +17,10 @@
 
 package at.pcgf.flymod;
 
+import at.pcgf.flymod.gui.FlyModSettings;
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
@@ -28,10 +28,16 @@ import java.io.File;
 
 @SuppressWarnings("FieldCanBeLocal,SpellCheckingInspection,UnusedAssignment,unused")
 public class LiteModFlyMod implements Tickable {
-    public static KeyBinding flyKey = new KeyBinding(I18n.format("key.flymod.fly"), Keyboard.KEY_B, I18n.format("key.categories.flymod"));
+    public static KeyBinding flyKey = new KeyBinding("key.flymod.fly", Keyboard.KEY_B, "key.categories.flymod");
+    public static KeyBinding settingsKey = new KeyBinding("key.flymod.settings", Keyboard.KEY_H, "key.categories.flymod");
 
     public static byte flying = -1;
     public static Minecraft minecraft = Minecraft.getMinecraft();
+
+    private static boolean backwardKeyPushed = false;
+    private static boolean forwardKeyPushed = false;
+    private static boolean leftKeyPushed = false;
+    private static boolean rightKeyPushed = false;
 
     public static int flyDownKey;
     public static int flyUpKey;
@@ -58,6 +64,7 @@ public class LiteModFlyMod implements Tickable {
     @Override
     public void init(File configPath) {
         LiteLoader.getInput().registerKeyBinding(flyKey);
+        LiteLoader.getInput().registerKeyBinding(settingsKey);
         flyDownKey = Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode();
         flyUpKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
         speedKey = Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode();
@@ -71,9 +78,11 @@ public class LiteModFlyMod implements Tickable {
 
     @Override
     public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock) {
-        if (inGame && minecraft.currentScreen == null && Minecraft.isGuiEnabled()) {
+        if (inGame && minecraft.currentScreen == null) {
             if (flyKey.isPressed()) {
                 flying = (byte)(flying > 0 ? 0 : 1);
+            } else if (settingsKey.isPressed()) {
+                minecraft.displayGuiScreen(new FlyModSettings());
             }
         }
     }

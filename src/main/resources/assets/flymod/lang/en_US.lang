@@ -1,2 +1,7 @@
 key.categories.flymod=Fly Mod
 key.flymod.fly=Toggle fly
+key.flymod.settings=Settings
+flymod.settings=Fly Mod Settings
+flymod.settings.mousecontrol=Enable mouse control
+flymod.settings.flyspeedmultiplier=Fly speed multiplier
+flymod.settings.runspeedmultiplier=Run speed multiplier

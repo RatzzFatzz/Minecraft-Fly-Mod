@@ -1,0 +1,7 @@
+key.categories.flymod=Fly Mod
+key.flymod.fly=Flug aktivieren/deaktivieren
+key.flymod.settings=Einstellungen
+flymod.settings=Fly Mod Einstellungen
+flymod.settings.mousecontrol=Maussteuerung aktivieren
+flymod.settings.flyspeedmultiplier=Fluggeschwindigkeitsmultiplikator
+flymod.settings.runspeedmultiplier=Laufgeschwindigkeitsmultiplikator
