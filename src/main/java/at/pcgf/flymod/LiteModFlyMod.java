@@ -18,16 +18,21 @@
 package at.pcgf.flymod;
 
 import at.pcgf.flymod.gui.FlyModSettings;
+import com.mojang.realmsclient.dto.RealmsServer;
+import com.mumfrey.liteloader.JoinGameListener;
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.play.server.SPacketJoinGame;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 
 @SuppressWarnings("FieldCanBeLocal,SpellCheckingInspection,UnusedAssignment,unused")
-public class LiteModFlyMod implements Tickable {
+public class LiteModFlyMod implements JoinGameListener, Tickable {
     public static KeyBinding flyKey = new KeyBinding("key.flymod.fly", Keyboard.KEY_B, "key.categories.flymod");
     public static KeyBinding settingsKey = new KeyBinding("key.flymod.settings", Keyboard.KEY_H, "key.categories.flymod");
 
@@ -74,6 +79,11 @@ public class LiteModFlyMod implements Tickable {
         rightKey = Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode();
         config = new FlyModConfig();
         LiteLoader.getInstance().registerExposable(config, null);
+    }
+
+    @Override
+    public void onJoinGame(INetHandler netHandler, SPacketJoinGame joinGamePacket, ServerData serverData, RealmsServer realmsServer) {
+        flying = -1;
     }
 
     @Override

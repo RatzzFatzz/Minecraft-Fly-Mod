@@ -31,6 +31,10 @@ public class FlyModConfig implements Exposable {
     public boolean mouseControl = true;
 
     @Expose
+    @SerializedName("flyUpDownBlocks")
+    public float flyUpDownBlocks = 0.4f;
+
+    @Expose
     @SerializedName("flySpeedMultiplier")
     public int flySpeedMultiplier = 3;
 

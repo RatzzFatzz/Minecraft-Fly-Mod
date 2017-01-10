@@ -44,10 +44,10 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
             boolean right = Keyboard.isKeyDown(LiteModFlyMod.rightKey);
             y = 0.0;
             if (Keyboard.isKeyDown(LiteModFlyMod.flyDownKey)) {
-                y -= 0.2f;
+                y -= LiteModFlyMod.config.flyUpDownBlocks;
             }
             if (Keyboard.isKeyDown(LiteModFlyMod.flyUpKey)) {
-                y += 0.2f;
+                y += LiteModFlyMod.config.flyUpDownBlocks;
             }
             if (LiteModFlyMod.config.mouseControl && y == 0) {
                 float yaw = rotationYaw;
@@ -86,6 +86,7 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
             fallDistance = 0.0f;
             motionY = 0.0;
             setSneaking(false);
+            setSprinting(false);
             capabilities.isFlying = true;
             sendPlayerAbilities();
             float multiplier = speedEnabled ? 1.0f * LiteModFlyMod.config.flySpeedMultiplier : 1.0f;
@@ -96,13 +97,16 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
         } else if (LiteModFlyMod.flying == 0) {
             LiteModFlyMod.flying = -1;
             fallDistance = 0.0f;
-            if (!capabilities.isCreativeMode) {
-                capabilities.isFlying = false;
-                sendPlayerAbilities();
+            capabilities.isFlying = false;
+            sendPlayerAbilities();
+        } else if (LiteModFlyMod.flying < 0) {
+            if (onGround && speedEnabled) {
+                x *= LiteModFlyMod.config.runSpeedMultiplier;
+                z *= LiteModFlyMod.config.runSpeedMultiplier;
+                setSprinting(false);
+            } else if (capabilities.isFlying) {
+                LiteModFlyMod.flying = 1;
             }
-        } else if (LiteModFlyMod.flying < 0 && onGround && speedEnabled) {
-            x *= LiteModFlyMod.config.runSpeedMultiplier;
-            z *= LiteModFlyMod.config.runSpeedMultiplier;
             super.move(type, x, y, z);
         } else {
             super.move(type, x, y, z);

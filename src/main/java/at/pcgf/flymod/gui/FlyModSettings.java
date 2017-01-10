@@ -31,12 +31,14 @@ import java.io.IOException;
 @SuppressWarnings("FieldCanBeLocal,NullableProblems,SpellCheckingInspection,UnusedAssignment")
 public class FlyModSettings extends GuiScreen {
     private GuiCheckbox mouseControl;
+    private GuiSlider flyUpDownBlocks;
     private GuiSlider flySpeedMultiplier;
     private GuiSlider runSpeedMultiplier;
 
     private static final int MOUSE_CONTROL_ID = 0;
-    private static final int FLY_MULTIPLIER_ID = 1;
-    private static final int RUN_MULTIPLIER_ID = 2;
+    private static final int FLY_UP_DOWN_ID = 1;
+    private static final int FLY_MULTIPLIER_ID = 2;
+    private static final int RUN_MULTIPLIER_ID = 3;
 
     @Override
     public void initGui() {
@@ -46,6 +48,21 @@ public class FlyModSettings extends GuiScreen {
         mouseControl = new GuiCheckbox(MOUSE_CONTROL_ID, LEFT, y, I18n.format("flymod.settings.mousecontrol"));
         mouseControl.checked = LiteModFlyMod.config.mouseControl;
         buttonList.add(MOUSE_CONTROL_ID, mouseControl);
+        flyUpDownBlocks = new GuiSlider(new GuiPageButtonList.GuiResponder() {
+            @Override
+            public void setEntryValue(int id, boolean value) {}
+
+            @Override
+            public void setEntryValue(int id, float value) {
+                LiteModFlyMod.config.flyUpDownBlocks = value;
+                setEntryValue(id, "" + LiteModFlyMod.config.flyUpDownBlocks);
+            }
+
+            @Override
+            public void setEntryValue(int id, String value) {}
+        }, FLY_UP_DOWN_ID, LEFT, y += 20, "flymod.settings.flyupdownblocks", 0.2f, 1.0f, LiteModFlyMod.config.flyUpDownBlocks, (id, name, value) -> name + ": " + value);
+        flyUpDownBlocks.setWidth(WIDTH);
+        buttonList.add(FLY_UP_DOWN_ID, flyUpDownBlocks);
         flySpeedMultiplier = new GuiSlider(new GuiPageButtonList.GuiResponder() {
             @Override
             public void setEntryValue(int id, boolean value) {}
@@ -58,7 +75,7 @@ public class FlyModSettings extends GuiScreen {
 
             @Override
             public void setEntryValue(int id, String value) {}
-        }, FLY_MULTIPLIER_ID, LEFT, y += 20, "flymod.settings.flyspeedmultiplier", 2.0f, 10.0f, LiteModFlyMod.config.flySpeedMultiplier, (id, name, value) -> name + ": " + Math.round(value));
+        }, FLY_MULTIPLIER_ID, LEFT, y += 25, "flymod.settings.flyspeedmultiplier", 2.0f, 10.0f, LiteModFlyMod.config.flySpeedMultiplier, (id, name, value) -> name + ": " + Math.round(value));
         flySpeedMultiplier.setWidth(WIDTH);
         buttonList.add(FLY_MULTIPLIER_ID, flySpeedMultiplier);
         runSpeedMultiplier = new GuiSlider(new GuiPageButtonList.GuiResponder() {
