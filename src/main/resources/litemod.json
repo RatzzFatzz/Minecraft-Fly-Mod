@@ -3,8 +3,8 @@
   "description": "This Mod allows you to enable a 3D fly and let you customize the fly and run speed.",
   "mcversion": "1.11",
   "name": "flymod",
-  "version": "1.0",
-  "revision": 1.0,
+  "version": "1.1",
+  "revision": 1.1,
   "mixinConfigs": [
     "mixins.flymod.json"
   ]

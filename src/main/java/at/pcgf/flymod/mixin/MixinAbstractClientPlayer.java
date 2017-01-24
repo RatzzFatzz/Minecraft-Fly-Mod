@@ -43,14 +43,18 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
             boolean left = Keyboard.isKeyDown(LiteModFlyMod.leftKey);
             boolean right = Keyboard.isKeyDown(LiteModFlyMod.rightKey);
             y = 0.0;
-            if (Keyboard.isKeyDown(LiteModFlyMod.flyDownKey)) {
-                y -= LiteModFlyMod.config.flyUpDownBlocks;
-            }
-            if (Keyboard.isKeyDown(LiteModFlyMod.flyUpKey)) {
-                y += LiteModFlyMod.config.flyUpDownBlocks;
+            if (LiteModFlyMod.minecraft.inGameHasFocus) {
+                if (Keyboard.isKeyDown(LiteModFlyMod.flyDownKey)) {
+                    y -= LiteModFlyMod.config.flyUpDownBlocks;
+                }
+                if (Keyboard.isKeyDown(LiteModFlyMod.flyUpKey)) {
+                    y += LiteModFlyMod.config.flyUpDownBlocks;
+                }
             }
             if (LiteModFlyMod.config.mouseControl && y == 0) {
+                float pitch = rotationPitch;
                 float yaw = rotationYaw;
+                boolean invert = false;
                 if (forwards) {
                     if (right) {
                         yaw += 45.0f;
@@ -59,22 +63,26 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
                     }
                 } else if (backwards) {
                     if (right) {
-                        yaw += 135.0f;
+                        yaw += 315.0f;
                     } else if (left) {
-                        yaw += 225.0f;
-                    } else {
-                        yaw += 180.0f;
+                        yaw += 45.0f;
                     }
+                    invert = true;
                 } else if (right) {
+                    pitch = 0.0f;
                     yaw += 90.0f;
                 } else if (left) {
+                    pitch = 0.0f;
                     yaw += 270.0f;
                 }
                 if (yaw > 180.0f) {
                     yaw -= 360.0f;
                 }
-                Vec3d e = Vec3d.fromPitchYaw(rotationPitch, yaw).normalize();
+                Vec3d e = Vec3d.fromPitchYaw(pitch, yaw).normalize();
                 double length = Math.sqrt((x * x) + (z * z));
+                if (invert) {
+                    length = -length;
+                }
                 x = e.xCoord * length;
                 y = e.yCoord * length;
                 z = e.zCoord * length;
