@@ -7,6 +7,7 @@ This Mod for Minecraft allows you to enable a 3D fly and let you customize the f
 * Any of the listed Minecraft versions
     * 1.11
     * 1.11.2
+    * 1.12
 * LiteLoader for your Minecraft version
 * Java 8
 

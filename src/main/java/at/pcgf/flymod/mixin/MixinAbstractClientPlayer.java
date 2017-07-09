@@ -83,9 +83,9 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
                 if (invert) {
                     length = -length;
                 }
-                x = e.xCoord * length;
-                y = e.yCoord * length;
-                z = e.zCoord * length;
+                x = e.x * length;
+                y = e.y * length;
+                z = e.z * length;
             }
             if (!(backwards || forwards || left || right)) {
                 motionX = 0.0;

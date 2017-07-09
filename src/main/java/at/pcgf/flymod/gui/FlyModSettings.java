@@ -98,7 +98,7 @@ public class FlyModSettings extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        drawCenteredString(LiteModFlyMod.minecraft.fontRendererObj, I18n.format("flymod.settings"), width / 2, 12, -1);
+        drawCenteredString(LiteModFlyMod.minecraft.fontRenderer, I18n.format("flymod.settings"), width / 2, 12, -1);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
