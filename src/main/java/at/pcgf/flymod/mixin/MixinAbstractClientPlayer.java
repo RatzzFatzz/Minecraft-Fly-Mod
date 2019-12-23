@@ -20,8 +20,9 @@ package at.pcgf.flymod.mixin;
 import at.pcgf.flymod.LiteModFlyMod;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.options.KeyBinding;
+import net.minecraft.entity.MovementType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
@@ -29,25 +30,28 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @SuppressWarnings("unused")
 @Mixin(AbstractClientPlayer.class)
-public abstract class MixinAbstractClientPlayer extends EntityPlayer {
+public abstract class MixinAbstractClientPlayer extends PlayerEntity {
     public MixinAbstractClientPlayer(World worldIn, GameProfile gameProfileIn) {
         super(worldIn, gameProfileIn);
     }
 
     @Override
-    public void move(MoverType type, double x, double y, double z) {
-        boolean speedEnabled = Keyboard.isKeyDown(LiteModFlyMod.speedKey);
+    public void move(MovementType type, Vec3d vec3d) {
+        x = vec3d.getX();
+        y = vec3d.getY();
+        z = vec3d.getZ();
+        boolean speedEnabled = LiteModFlyMod.speedKey.isPressed();
         if (LiteModFlyMod.flying > 0) {
-            boolean backwards = Keyboard.isKeyDown(LiteModFlyMod.backwardKey);
-            boolean forwards = Keyboard.isKeyDown(LiteModFlyMod.forwardKey);
-            boolean left = Keyboard.isKeyDown(LiteModFlyMod.leftKey);
-            boolean right = Keyboard.isKeyDown(LiteModFlyMod.rightKey);
+            boolean backwards = LiteModFlyMod.backwardKey.isPressed();
+            boolean forwards = LiteModFlyMod.forwardKey.isPressed();
+            boolean left = LiteModFlyMod.leftKey.isPressed();
+            boolean right = LiteModFlyMod.rightKey.isPressed();
             y = 0.0;
-            if (LiteModFlyMod.minecraft.inGameHasFocus) {
-                if (Keyboard.isKeyDown(LiteModFlyMod.flyDownKey)) {
+            if (LiteModFlyMod.minecraft.isWindowFocused()) {
+                if (LiteModFlyMod.flyDownKey.isPressed()) {
                     y -= LiteModFlyMod.config.flyUpDownBlocks;
                 }
-                if (Keyboard.isKeyDown(LiteModFlyMod.flyUpKey)) {
+                if (LiteModFlyMod.flyUpKey.isPressed()) {
                     y += LiteModFlyMod.config.flyUpDownBlocks;
                 }
             }
@@ -101,7 +105,7 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
             x *= multiplier;
             y *= multiplier;
             z *= multiplier;
-            super.move(type, x, y, z);
+            super.move(type, vec3d);
         } else if (LiteModFlyMod.flying == 0) {
             LiteModFlyMod.flying = -1;
             fallDistance = 0.0f;
@@ -115,9 +119,9 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
             } else if (capabilities.isFlying) {
                 LiteModFlyMod.flying = 1;
             }
-            super.move(type, x, y, z);
+            super.move(type, vec3d);
         } else {
-            super.move(type, x, y, z);
+            super.move(type, vec3d);
         }
     }
 }

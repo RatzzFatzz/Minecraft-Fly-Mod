@@ -22,35 +22,54 @@ import com.mojang.realmsclient.dto.RealmsServer;
 import com.mumfrey.liteloader.JoinGameListener;
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
+import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
+import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.play.server.SPacketJoinGame;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Tickable;
+import net.minecraft.client.util.InputUtil.KeyCode;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.input.Keyboard;
+
 
 import java.io.File;
 
 @SuppressWarnings("FieldCanBeLocal,SpellCheckingInspection,UnusedAssignment,unused")
 public class LiteModFlyMod implements JoinGameListener, Tickable {
-    public static KeyBinding flyKey = new KeyBinding("key.flymod.fly", Keyboard.KEY_B, "key.categories.flymod");
-    public static KeyBinding settingsKey = new KeyBinding("key.flymod.settings", Keyboard.KEY_H, "key.categories.flymod");
+    public static FabricKeyBinding flyKey = FabricKeyBinding.Builder.create(
+            new Identifier("flyKey"),
+            InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_B,
+            "key.categories.flymod"
+    ).build();
+    public static FabricKeyBinding settingsKey = FabricKeyBinding.Builder.create(
+            new Identifier("settingsKey"),
+            InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_H,
+            "key.categories.flymod"
+    ).build();
 
     public static byte flying = -1;
-    public static Minecraft minecraft = Minecraft.getMinecraft();
+    public static MinecraftClient minecraft = MinecraftClient.getInstance();
 
     private static boolean backwardKeyPushed = false;
     private static boolean forwardKeyPushed = false;
     private static boolean leftKeyPushed = false;
     private static boolean rightKeyPushed = false;
 
-    public static int flyDownKey;
-    public static int flyUpKey;
-    public static int speedKey;
-    public static int backwardKey;
-    public static int forwardKey;
-    public static int leftKey;
-    public static int rightKey;
+    public static KeyBinding flyDownKey;
+    public static KeyBinding flyUpKey;
+    public static KeyBinding speedKey;
+    public static KeyBinding backwardKey;
+    public static KeyBinding forwardKey;
+    public static KeyBinding leftKey;
+    public static KeyBinding rightKey;
     public static FlyModConfig config;
 
     @Override
@@ -68,21 +87,22 @@ public class LiteModFlyMod implements JoinGameListener, Tickable {
 
     @Override
     public void init(File configPath) {
-        LiteLoader.getInput().registerKeyBinding(flyKey);
-        LiteLoader.getInput().registerKeyBinding(settingsKey);
-        flyDownKey = Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode();
-        flyUpKey = Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
-        speedKey = Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode();
-        backwardKey = Minecraft.getMinecraft().gameSettings.keyBindBack.getKeyCode();
-        forwardKey = Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode();
-        leftKey = Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode();
-        rightKey = Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode();
+        KeyBindingRegistry.INSTANCE.register(flyKey);
+        KeyBindingRegistry.INSTANCE.register(settingsKey);
+        flyDownKey = MinecraftClient.getInstance().options.keySneak;
+        flyUpKey = MinecraftClient.getInstance().options.keyJump;
+        speedKey = MinecraftClient.getInstance().options.keySprint;
+        backwardKey = MinecraftClient.getInstance().options.keyBack;
+        forwardKey = MinecraftClient.getInstance().options.keyForward;
+        leftKey = MinecraftClient.getInstance().options.keyLeft;
+        rightKey = MinecraftClient.getInstance().options.keyRight;
         config = new FlyModConfig();
         LiteLoader.getInstance().registerExposable(config, null);
     }
 
     @Override
-    public void onJoinGame(INetHandler netHandler, SPacketJoinGame joinGamePacket, ServerData serverData, RealmsServer realmsServer) {
+    public void onJoinGame(INetHandler netHandler, SPacketJoinGame joinGamePacket, ServerData serverData,
+                           RealmsServer realmsServer) {
         flying = -1;
     }
 
