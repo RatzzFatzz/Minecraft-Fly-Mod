@@ -18,30 +18,20 @@
 package at.pcgf.flymod;
 
 import at.pcgf.flymod.gui.FlyModSettings;
-import com.mojang.realmsclient.dto.RealmsServer;
-import com.mumfrey.liteloader.JoinGameListener;
-import com.mumfrey.liteloader.Tickable;
-import com.mumfrey.liteloader.core.LiteLoader;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.play.server.SPacketJoinGame;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
-import net.minecraft.client.util.InputUtil.KeyCode;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.input.Keyboard;
 
 
 import java.io.File;
 
 @SuppressWarnings("FieldCanBeLocal,SpellCheckingInspection,UnusedAssignment,unused")
-public class LiteModFlyMod implements JoinGameListener, Tickable {
+public class LiteModFlyMod implements Tickable {
     public static FabricKeyBinding flyKey = FabricKeyBinding.Builder.create(
             new Identifier("flyKey"),
             InputUtil.Type.KEYSYM,
@@ -72,20 +62,16 @@ public class LiteModFlyMod implements JoinGameListener, Tickable {
     public static KeyBinding rightKey;
     public static FlyModConfig config;
 
-    @Override
     public String getVersion() {
         return "1.0";
     }
 
-    @Override
     public String getName() {
         return "Fly Mod";
     }
 
-    @Override
     public void upgradeSettings(String version, File configPath, File oldConfigPath) {}
 
-    @Override
     public void init(File configPath) {
         KeyBindingRegistry.INSTANCE.register(flyKey);
         KeyBindingRegistry.INSTANCE.register(settingsKey);
@@ -97,22 +83,24 @@ public class LiteModFlyMod implements JoinGameListener, Tickable {
         leftKey = MinecraftClient.getInstance().options.keyLeft;
         rightKey = MinecraftClient.getInstance().options.keyRight;
         config = new FlyModConfig();
-        LiteLoader.getInstance().registerExposable(config, null);
+
+//        LiteLoader.getInstance().registerExposable(config, null);
     }
 
-    @Override
-    public void onJoinGame(INetHandler netHandler, SPacketJoinGame joinGamePacket, ServerData serverData,
-                           RealmsServer realmsServer) {
-        flying = -1;
-    }
+//    @Override
+//    public void onJoinGame(INetHandle netHandler, SPacketJoinGame joinGamePacket, ServerData serverData,
+//                           RealmsServer realmsServer) {
+//        flying = -1;
+//    }
 
     @Override
-    public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock) {
-        if (inGame && minecraft.currentScreen == null) {
+    public void tick() {
+        if (MinecraftClient.getInstance().isWindowFocused() && minecraft.currentScreen == null) {
             if (flyKey.isPressed()) {
                 flying = (byte)(flying > 0 ? 0 : 1);
             } else if (settingsKey.isPressed()) {
-                minecraft.displayGuiScreen(new FlyModSettings());
+                minecraft.openScreen(new FlyModSettings());
+                MinecraftClient.getInstance().openScreen(new FlyModSettings());
             }
         }
     }

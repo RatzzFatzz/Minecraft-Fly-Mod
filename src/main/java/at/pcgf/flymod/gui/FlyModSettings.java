@@ -24,16 +24,23 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
+import net.minecraft.client.gui.screen.Overlay;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.Screens;
+import net.minecraft.client.gui.screen.controls.ControlsOptionsScreen;
+import net.minecraft.client.gui.widget.CheckboxWidget;
+import net.minecraft.client.gui.widget.GameOptionSliderWidget;
+import net.minecraft.client.gui.widget.ToggleButtonWidget;
 import net.minecraft.client.resources.I18n;
 
 import java.io.IOException;
 
 @SuppressWarnings("FieldCanBeLocal,NullableProblems,SpellCheckingInspection,UnusedAssignment")
-public class FlyModSettings extends GuiScreen {
-    private GuiCheckbox mouseControl;
-    private GuiSlider flyUpDownBlocks;
-    private GuiSlider flySpeedMultiplier;
-    private GuiSlider runSpeedMultiplier;
+public class FlyModSettings extends Screen {
+    private ToggleButtonWidget mouseControl;
+    private GameOptionSliderWidget flyUpDownBlocks;
+    private GameOptionSliderWidget flySpeedMultiplier;
+    private GameOptionSliderWidget runSpeedMultiplier;
 
     private static final int MOUSE_CONTROL_ID = 0;
     private static final int FLY_UP_DOWN_ID = 1;
@@ -41,13 +48,14 @@ public class FlyModSettings extends GuiScreen {
     private static final int RUN_MULTIPLIER_ID = 3;
 
     @Override
-    public void initGui() {
+    public void init() {
         final int LEFT = width / 10;
         final int WIDTH = LEFT * 8;
         int y = 40;
         mouseControl = new GuiCheckbox(MOUSE_CONTROL_ID, LEFT, y, I18n.format("flymod.settings.mousecontrol"));
-        mouseControl.checked = LiteModFlyMod.config.mouseControl;
+        mouseControl.setToggled(LiteModFlyMod.config.mouseControl);
         buttonList.add(MOUSE_CONTROL_ID, mouseControl);
+
         flyUpDownBlocks = new GuiSlider(new GuiPageButtonList.GuiResponder() {
             @Override
             public void setEntryValue(int id, boolean value) {}
@@ -61,8 +69,10 @@ public class FlyModSettings extends GuiScreen {
             @Override
             public void setEntryValue(int id, String value) {}
         }, FLY_UP_DOWN_ID, LEFT, y += 20, "flymod.settings.flyupdownblocks", 0.2f, 1.0f, LiteModFlyMod.config.flyUpDownBlocks, (id, name, value) -> name + ": " + value);
+
         flyUpDownBlocks.setWidth(WIDTH);
         buttonList.add(FLY_UP_DOWN_ID, flyUpDownBlocks);
+
         flySpeedMultiplier = new GuiSlider(new GuiPageButtonList.GuiResponder() {
             @Override
             public void setEntryValue(int id, boolean value) {}
@@ -76,8 +86,10 @@ public class FlyModSettings extends GuiScreen {
             @Override
             public void setEntryValue(int id, String value) {}
         }, FLY_MULTIPLIER_ID, LEFT, y += 25, "flymod.settings.flyspeedmultiplier", 2.0f, 10.0f, LiteModFlyMod.config.flySpeedMultiplier, (id, name, value) -> name + ": " + Math.round(value));
+
         flySpeedMultiplier.setWidth(WIDTH);
         buttonList.add(FLY_MULTIPLIER_ID, flySpeedMultiplier);
+
         runSpeedMultiplier = new GuiSlider(new GuiPageButtonList.GuiResponder() {
             @Override
             public void setEntryValue(int id, boolean value) {}
@@ -91,6 +103,7 @@ public class FlyModSettings extends GuiScreen {
             @Override
             public void setEntryValue(int id, String value) {}
         }, RUN_MULTIPLIER_ID, LEFT, y += 25, "flymod.settings.runspeedmultiplier", 2.0f, 10.0f, LiteModFlyMod.config.runSpeedMultiplier, (id, name, value) -> name + ": " + Math.round(value));
+
         runSpeedMultiplier.setWidth(WIDTH);
         buttonList.add(RUN_MULTIPLIER_ID, runSpeedMultiplier);
     }

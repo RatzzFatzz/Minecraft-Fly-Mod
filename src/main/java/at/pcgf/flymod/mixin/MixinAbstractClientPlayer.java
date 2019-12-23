@@ -19,17 +19,15 @@ package at.pcgf.flymod.mixin;
 
 import at.pcgf.flymod.LiteModFlyMod;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 
 @SuppressWarnings("unused")
-@Mixin(AbstractClientPlayer.class)
+@Mixin(AbstractClientPlayerEntity.class)
 public abstract class MixinAbstractClientPlayer extends PlayerEntity {
     public MixinAbstractClientPlayer(World worldIn, GameProfile gameProfileIn) {
         super(worldIn, gameProfileIn);
@@ -56,8 +54,8 @@ public abstract class MixinAbstractClientPlayer extends PlayerEntity {
                 }
             }
             if (LiteModFlyMod.config.mouseControl && y == 0) {
-                float pitch = rotationPitch;
-                float yaw = rotationYaw;
+                float pitch = prevPitch;
+                float yaw = prevYaw;
                 boolean invert = false;
                 if (forwards) {
                     if (right) {
@@ -82,7 +80,7 @@ public abstract class MixinAbstractClientPlayer extends PlayerEntity {
                 if (yaw > 180.0f) {
                     yaw -= 360.0f;
                 }
-                Vec3d e = Vec3d.fromPitchYaw(pitch, yaw).normalize();
+                Vec3d e = Vec3d.fromPolar(pitch, yaw).normalize();
                 double length = Math.sqrt((x * x) + (z * z));
                 if (invert) {
                     length = -length;
@@ -91,16 +89,16 @@ public abstract class MixinAbstractClientPlayer extends PlayerEntity {
                 y = e.y * length;
                 z = e.z * length;
             }
-            if (!(backwards || forwards || left || right)) {
-                motionX = 0.0;
-                motionZ = 0.0;
-            }
+//            if (!(backwards || forwards || left || right)) {
+//                motionX = 0.0;
+//                motionZ = 0.0;
+//            }
             fallDistance = 0.0f;
-            motionY = 0.0;
+//            motionY = 0.0;
             setSneaking(false);
             setSprinting(false);
-            capabilities.isFlying = true;
-            sendPlayerAbilities();
+            abilities.flying = false;
+            sendAbilitiesUpdate();
             float multiplier = speedEnabled ? 1.0f * LiteModFlyMod.config.flySpeedMultiplier : 1.0f;
             x *= multiplier;
             y *= multiplier;
@@ -109,14 +107,14 @@ public abstract class MixinAbstractClientPlayer extends PlayerEntity {
         } else if (LiteModFlyMod.flying == 0) {
             LiteModFlyMod.flying = -1;
             fallDistance = 0.0f;
-            capabilities.isFlying = false;
-            sendPlayerAbilities();
+            abilities.flying = false;
+            sendAbilitiesUpdate();
         } else if (LiteModFlyMod.flying < 0) {
             if (onGround && speedEnabled) {
                 x *= LiteModFlyMod.config.runSpeedMultiplier;
                 z *= LiteModFlyMod.config.runSpeedMultiplier;
                 setSprinting(false);
-            } else if (capabilities.isFlying) {
+            } else if (abilities.flying) {
                 LiteModFlyMod.flying = 1;
             }
             super.move(type, vec3d);
