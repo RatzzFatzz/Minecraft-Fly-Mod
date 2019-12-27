@@ -17,50 +17,65 @@
 
 package at.pcgf.flymod;
 
-import at.pcgf.flymod.gui.FlyModSettings;
+import at.pcgf.flymod.gui.Settings;
+import me.sargunvohra.mcmods.autoconfig1.AutoConfig;
+import me.sargunvohra.mcmods.autoconfig1.ConfigHolder;
+import me.sargunvohra.mcmods.autoconfig1.serializer.GsonConfigSerializer;
+import me.sargunvohra.mcmods.autoconfig1.serializer.PartitioningSerializer;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
+import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Tickable;
 import org.lwjgl.glfw.GLFW;
 
 
 import java.io.File;
 
-@SuppressWarnings("FieldCanBeLocal,SpellCheckingInspection,UnusedAssignment,unused")
-public class LiteModFlyMod implements Tickable {
+public class LiteModFlyMod implements ModInitializer, ClientModInitializer {
     public static FabricKeyBinding flyKey = FabricKeyBinding.Builder.create(
-            new Identifier("flyKey"),
+            new Identifier("flykey"),
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_B,
             "key.categories.flymod"
     ).build();
     public static FabricKeyBinding settingsKey = FabricKeyBinding.Builder.create(
-            new Identifier("settingsKey"),
+            new Identifier("settingskey"),
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_H,
             "key.categories.flymod"
     ).build();
 
-    public static byte flying = -1;
-    public static MinecraftClient minecraft = MinecraftClient.getInstance();
+    public static byte flying = 0;
+    public static ConfigHolder<FlyModConfig> config;
 
-    private static boolean backwardKeyPushed = false;
-    private static boolean forwardKeyPushed = false;
-    private static boolean leftKeyPushed = false;
-    private static boolean rightKeyPushed = false;
+    @Override
+    public void onInitializeClient() {
+        ConfigHolder<FlyModConfig> holder = AutoConfig.register(FlyModConfig.class, GsonConfigSerializer::new);
 
-    public static KeyBinding flyDownKey;
-    public static KeyBinding flyUpKey;
-    public static KeyBinding speedKey;
-    public static KeyBinding backwardKey;
-    public static KeyBinding forwardKey;
-    public static KeyBinding leftKey;
-    public static KeyBinding rightKey;
-    public static FlyModConfig config;
+        KeyBindingRegistry.INSTANCE.register(flyKey);
+        KeyBindingRegistry.INSTANCE.register(settingsKey);
+        ClientTickCallback.EVENT.register( e -> {
+            if(flyKey.wasPressed()) {
+                System.out.println("b is pressed");
+                flying = (byte)(flying > 0 ? 0 : 1);
+            } else if(settingsKey.wasPressed()) {
+                FlyModConfig config = AutoConfig.getConfigHolder(FlyModConfig.class).getConfig();
+                System.out.println("h is pressed");
+            }
+        });
+
+    }
+
+    @Override
+    public void onInitialize() {
+        AutoConfig.getGuiRegistry(FlyModConfig.class);
+
+    }
 
     public String getVersion() {
         return "1.0";
@@ -71,37 +86,4 @@ public class LiteModFlyMod implements Tickable {
     }
 
     public void upgradeSettings(String version, File configPath, File oldConfigPath) {}
-
-    public void init(File configPath) {
-        KeyBindingRegistry.INSTANCE.register(flyKey);
-        KeyBindingRegistry.INSTANCE.register(settingsKey);
-        flyDownKey = MinecraftClient.getInstance().options.keySneak;
-        flyUpKey = MinecraftClient.getInstance().options.keyJump;
-        speedKey = MinecraftClient.getInstance().options.keySprint;
-        backwardKey = MinecraftClient.getInstance().options.keyBack;
-        forwardKey = MinecraftClient.getInstance().options.keyForward;
-        leftKey = MinecraftClient.getInstance().options.keyLeft;
-        rightKey = MinecraftClient.getInstance().options.keyRight;
-        config = new FlyModConfig();
-
-//        LiteLoader.getInstance().registerExposable(config, null);
-    }
-
-//    @Override
-//    public void onJoinGame(INetHandle netHandler, SPacketJoinGame joinGamePacket, ServerData serverData,
-//                           RealmsServer realmsServer) {
-//        flying = -1;
-//    }
-
-    @Override
-    public void tick() {
-        if (MinecraftClient.getInstance().isWindowFocused() && minecraft.currentScreen == null) {
-            if (flyKey.isPressed()) {
-                flying = (byte)(flying > 0 ? 0 : 1);
-            } else if (settingsKey.isPressed()) {
-                minecraft.openScreen(new FlyModSettings());
-                MinecraftClient.getInstance().openScreen(new FlyModSettings());
-            }
-        }
-    }
 }

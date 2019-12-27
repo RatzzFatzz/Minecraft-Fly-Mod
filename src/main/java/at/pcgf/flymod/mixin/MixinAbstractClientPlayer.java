@@ -17,9 +17,11 @@
 
 package at.pcgf.flymod.mixin;
 
+import at.pcgf.flymod.FlyModConfig;
 import at.pcgf.flymod.LiteModFlyMod;
-import com.mojang.authlib.GameProfile;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
@@ -27,98 +29,97 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
 @SuppressWarnings("unused")
-@Mixin(AbstractClientPlayerEntity.class)
-public abstract class MixinAbstractClientPlayer extends PlayerEntity {
-    public MixinAbstractClientPlayer(World worldIn, GameProfile gameProfileIn) {
-        super(worldIn, gameProfileIn);
+@Mixin(PlayerEntity.class)
+public abstract class MixinAbstractClientPlayer extends LivingEntity {
+
+    protected MixinAbstractClientPlayer(EntityType<? extends LivingEntity> entityType, World world) {
+        super(entityType, world);
     }
 
     @Override
     public void move(MovementType type, Vec3d vec3d) {
-        x = vec3d.getX();
-        y = vec3d.getY();
-        z = vec3d.getZ();
-        boolean speedEnabled = LiteModFlyMod.speedKey.isPressed();
-        if (LiteModFlyMod.flying > 0) {
-            boolean backwards = LiteModFlyMod.backwardKey.isPressed();
-            boolean forwards = LiteModFlyMod.forwardKey.isPressed();
-            boolean left = LiteModFlyMod.leftKey.isPressed();
-            boolean right = LiteModFlyMod.rightKey.isPressed();
+        double x = vec3d.getX();
+        double y;
+        double z = vec3d.getZ();
+        boolean speedEnabled = MinecraftClient.getInstance().options.keySprint.isPressed();
+        if(LiteModFlyMod.flying > 0){
+            boolean backwardsMovement = MinecraftClient.getInstance().options.keyBack.isPressed();
+            boolean forwardsMovement = MinecraftClient.getInstance().options.keyForward.isPressed();
+            boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
+            boolean rightMovement = MinecraftClient.getInstance().options.keyRight.isPressed();
             y = 0.0;
-            if (LiteModFlyMod.minecraft.isWindowFocused()) {
-                if (LiteModFlyMod.flyDownKey.isPressed()) {
-                    y -= LiteModFlyMod.config.flyUpDownBlocks;
-                }
-                if (LiteModFlyMod.flyUpKey.isPressed()) {
-                    y += LiteModFlyMod.config.flyUpDownBlocks;
-                }
+            if(MinecraftClient.getInstance().options.keySneak.isPressed()){
+                y -= 5;
+            }else if(MinecraftClient.getInstance().options.keyJump.isPressed()){
+                y += 5;
             }
-            if (LiteModFlyMod.config.mouseControl && y == 0) {
+            if(true && y == 0){
                 float pitch = prevPitch;
                 float yaw = prevYaw;
                 boolean invert = false;
-                if (forwards) {
-                    if (right) {
+                if(forwardsMovement){
+                    if(rightMovement){
                         yaw += 45.0f;
-                    } else if (left) {
+                    }else if(leftMovement){
                         yaw += 315.0f;
                     }
-                } else if (backwards) {
-                    if (right) {
+                }else if(backwardsMovement){
+                    if(rightMovement){
                         yaw += 315.0f;
-                    } else if (left) {
+                    }else if(leftMovement){
                         yaw += 45.0f;
                     }
                     invert = true;
-                } else if (right) {
+                }else if(rightMovement){
                     pitch = 0.0f;
                     yaw += 90.0f;
-                } else if (left) {
+                }else if(leftMovement){
                     pitch = 0.0f;
                     yaw += 270.0f;
                 }
-                if (yaw > 180.0f) {
+                if(yaw > 180.0f){
                     yaw -= 360.0f;
                 }
                 Vec3d e = Vec3d.fromPolar(pitch, yaw).normalize();
                 double length = Math.sqrt((x * x) + (z * z));
-                if (invert) {
-                    length = -length;
+                if(invert){
+                    length = - length;
                 }
-                x = e.x * length;
-                y = e.y * length;
-                z = e.z * length;
-            }
-//            if (!(backwards || forwards || left || right)) {
-//                motionX = 0.0;
-//                motionZ = 0.0;
-//            }
-            fallDistance = 0.0f;
-//            motionY = 0.0;
-            setSneaking(false);
-            setSprinting(false);
-            abilities.flying = false;
-            sendAbilitiesUpdate();
-            float multiplier = speedEnabled ? 1.0f * LiteModFlyMod.config.flySpeedMultiplier : 1.0f;
-            x *= multiplier;
-            y *= multiplier;
-            z *= multiplier;
-            super.move(type, vec3d);
-        } else if (LiteModFlyMod.flying == 0) {
-            LiteModFlyMod.flying = -1;
-            fallDistance = 0.0f;
-            abilities.flying = false;
-            sendAbilitiesUpdate();
-        } else if (LiteModFlyMod.flying < 0) {
-            if (onGround && speedEnabled) {
-                x *= LiteModFlyMod.config.runSpeedMultiplier;
-                z *= LiteModFlyMod.config.runSpeedMultiplier;
+                x = e.getX() * length;
+                y = e.getY() * length;
+                z = e.getZ() * length;
+
+                fallDistance = 0.0f;
+
+                setSneaking(false);
                 setSprinting(false);
-            } else if (abilities.flying) {
-                LiteModFlyMod.flying = 1;
+
+                ((PlayerEntity)(Object)this).sendAbilitiesUpdate();
+
+                if(! (backwardsMovement || forwardsMovement || leftMovement || rightMovement)){
+                    setVelocityClient(0.0, 0.0, 0.0);
+                }
+
+                float multiplier = speedEnabled ? 1.0f * 10 : 1.0f;
+                x *= multiplier;
+                y *= multiplier;
+                z *= multiplier;
+                super.move(type, new Vec3d(x, y, z));
+            }else{
+                super.move(type, new Vec3d(x, y, z));
+            }
+        }else if(LiteModFlyMod.flying == 0){
+            LiteModFlyMod.flying = - 1;
+            fallDistance = 0.0f;
+        }else if (LiteModFlyMod.flying < 0) {
+            if (onGround && speedEnabled) {
+                x *= 5;
+                z *= 5;
+                setSprinting(false);
+                ((PlayerEntity)(Object)this).sendAbilitiesUpdate();
             }
             super.move(type, vec3d);
-        } else {
+        }else{
             super.move(type, vec3d);
         }
     }

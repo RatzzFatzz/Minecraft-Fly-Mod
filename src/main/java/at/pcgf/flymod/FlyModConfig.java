@@ -17,28 +17,20 @@
 
 package at.pcgf.flymod;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import com.mumfrey.liteloader.modconfig.ConfigStrategy;
-import com.mumfrey.liteloader.modconfig.Exposable;
-import com.mumfrey.liteloader.modconfig.ExposableOptions;
+import me.sargunvohra.mcmods.autoconfig1.ConfigData;
+import me.sargunvohra.mcmods.autoconfig1.annotation.Config;
+import me.sargunvohra.mcmods.autoconfig1.annotation.ConfigEntry;
 
-@SuppressWarnings("SpellCheckingInspection")
-@ExposableOptions(strategy = ConfigStrategy.Versioned, filename = "flymod.json")
-public class FlyModConfig implements Exposable {
-    @Expose
-    @SerializedName("mouseControl")
+@Config(name = "flymod")
+public class FlyModConfig implements ConfigData {
+
     public boolean mouseControl = true;
 
-    @Expose
-    @SerializedName("flyUpDownBlocks")
     public float flyUpDownBlocks = 0.4f;
 
-    @Expose
-    @SerializedName("flySpeedMultiplier")
+    @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
     public int flySpeedMultiplier = 3;
 
-    @Expose
-    @SerializedName("runSpeedMultiplier")
+    @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
     public int runSpeedMultiplier = 2;
 }

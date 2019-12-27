@@ -30,20 +30,31 @@ group = project.maven_group
 minecraft {
 }
 
+repositories {
+    mavenCentral()
+    jcenter()
+    maven{url = "http://maven.fabricmc.net"}
+    maven{url = "https://minecraft.curseforge.com/api/maven"}
+    maven{url = "http://maven.sargunv.s3-website-us-west-2.amazonaws.com/"}
+    maven{url = "https://maven.fabricmc.net/io/github/prospector/modmenu/ModMenu/"}
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}"
     modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modCompile "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
-    modCompile "mcmods:auto-config:${project.auto_config_version}"
+    modCompile "me.sargunvohra.mcmods:auto-config:${project.auto_config_version}"
     modCompile "prospector.modmenu:ModMenu:${project.mod_menu_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modCompile "net.fabricmc:sponge-mixin:0.8.11"
+    modCompile "net.fabricmc:sponge-mixin:${mixin_version}"
 
-    include "net.fabricmc:fabric:${project.fabric_version}"
     include "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
     include "me.sargunvohra.mcmods:auto-config:${project.auto_config_version}"
+    include "prospector.modmenu:ModMenu:${project.mod_menu_version}"
+    include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    include "net.fabricmc:sponge-mixin:${mixin_version}"
 
 }
 
