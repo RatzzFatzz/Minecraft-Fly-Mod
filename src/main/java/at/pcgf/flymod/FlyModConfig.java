@@ -22,6 +22,7 @@ import me.sargunvohra.mcmods.autoconfig1.annotation.Config;
 import me.sargunvohra.mcmods.autoconfig1.annotation.ConfigEntry;
 
 @Config(name = "flymod")
+@Config.Gui.Background("minecraft:textures/block/oak_planks.png")
 public class FlyModConfig implements ConfigData {
 
     public boolean mouseControl = true;
@@ -33,4 +34,6 @@ public class FlyModConfig implements ConfigData {
 
     @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
     public int runSpeedMultiplier = 2;
+
+
 }

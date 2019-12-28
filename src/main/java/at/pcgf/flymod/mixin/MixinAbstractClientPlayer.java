@@ -49,11 +49,11 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
             boolean rightMovement = MinecraftClient.getInstance().options.keyRight.isPressed();
             y = 0.0;
             if(MinecraftClient.getInstance().options.keySneak.isPressed()){
-                y -= 5;
+                y -= LiteModFlyMod.config.getConfig().flyUpDownBlocks;
             }else if(MinecraftClient.getInstance().options.keyJump.isPressed()){
-                y += 5;
+                y += LiteModFlyMod.config.getConfig().flyUpDownBlocks;
             }
-            if(true && y == 0){
+            if(LiteModFlyMod.config.getConfig().mouseControl && y == 0){
                 float pitch = prevPitch;
                 float yaw = prevYaw;
                 boolean invert = false;
@@ -100,7 +100,7 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
                     setVelocityClient(0.0, 0.0, 0.0);
                 }
 
-                float multiplier = speedEnabled ? 1.0f * 10 : 1.0f;
+                float multiplier = speedEnabled ? 1.0f * LiteModFlyMod.config.getConfig().flySpeedMultiplier : 1.0f;
                 x *= multiplier;
                 y *= multiplier;
                 z *= multiplier;
@@ -113,10 +113,9 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
             fallDistance = 0.0f;
         }else if (LiteModFlyMod.flying < 0) {
             if (onGround && speedEnabled) {
-                x *= 5;
-                z *= 5;
+                x *= LiteModFlyMod.config.getConfig().runSpeedMultiplier;
+                z *= LiteModFlyMod.config.getConfig().runSpeedMultiplier;
                 setSprinting(false);
-                ((PlayerEntity)(Object)this).sendAbilitiesUpdate();
             }
             super.move(type, vec3d);
         }else{
