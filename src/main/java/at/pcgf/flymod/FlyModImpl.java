@@ -29,7 +29,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
-public class LiteModFlyMod implements ModInitializer, ClientModInitializer {
+public class FlyModImpl implements ModInitializer, ClientModInitializer {
     public static FabricKeyBinding flyKey = FabricKeyBinding.Builder.create(
             new Identifier("flykey"),
             InputUtil.Type.KEYSYM,

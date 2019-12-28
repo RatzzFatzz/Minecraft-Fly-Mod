@@ -4,7 +4,7 @@
   "package": "at.pcgf.flymod.mixin",
   "refmap": "mixins.flymod.refmap.json",
   "client": [
-    "MixinAbstractClientPlayer"
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

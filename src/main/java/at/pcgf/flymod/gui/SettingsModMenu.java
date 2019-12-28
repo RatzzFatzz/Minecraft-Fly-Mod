@@ -10,7 +10,7 @@ import net.minecraft.client.gui.screen.Screen;
 import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
-public class Settings implements ModMenuApi {
+public class SettingsModMenu implements ModMenuApi {
     @Override
     public String getModId() {
         return "flymod";

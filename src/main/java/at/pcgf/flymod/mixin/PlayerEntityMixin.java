@@ -17,8 +17,7 @@
 
 package at.pcgf.flymod.mixin;
 
-import at.pcgf.flymod.FlyModConfig;
-import at.pcgf.flymod.LiteModFlyMod;
+import at.pcgf.flymod.FlyModImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -30,9 +29,9 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @SuppressWarnings("unused")
 @Mixin(PlayerEntity.class)
-public abstract class MixinAbstractClientPlayer extends LivingEntity {
+public abstract class PlayerEntityMixin extends LivingEntity {
 
-    protected MixinAbstractClientPlayer(EntityType<? extends LivingEntity> entityType, World world) {
+    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -42,21 +41,21 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
         double y = vec3d.getY();
         double z = vec3d.getZ();
         boolean speedEnabled = MinecraftClient.getInstance().options.keySprint.isPressed();
-        if(LiteModFlyMod.flying > 0){
+        if(FlyModImpl.flying > 0){
             boolean backwardsMovement = MinecraftClient.getInstance().options.keyBack.isPressed();
             boolean forwardsMovement = MinecraftClient.getInstance().options.keyForward.isPressed();
             boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
             boolean rightMovement = MinecraftClient.getInstance().options.keyRight.isPressed();
             y = 0.0;
-            double flyUpDownBlocks = LiteModFlyMod.config.getConfig().multiplyUpDown && speedEnabled ?
-                    LiteModFlyMod.config.getConfig().flyUpDownBlocks * LiteModFlyMod.config.getConfig().flySpeedMultiplier:
-                    LiteModFlyMod.config.getConfig().flyUpDownBlocks;
+            double flyUpDownBlocks = FlyModImpl.config.getConfig().multiplyUpDown && speedEnabled ?
+                    FlyModImpl.config.getConfig().flyUpDownBlocks * FlyModImpl.config.getConfig().flySpeedMultiplier:
+                    FlyModImpl.config.getConfig().flyUpDownBlocks;
             if(MinecraftClient.getInstance().options.keySneak.isPressed()){
                 y -= flyUpDownBlocks;
             }else if(MinecraftClient.getInstance().options.keyJump.isPressed()){
                 y += flyUpDownBlocks;
             }
-            if(LiteModFlyMod.config.getConfig().mouseControl && y == 0){
+            if(FlyModImpl.config.getConfig().mouseControl && y == 0){
                 float pitch = prevPitch;
                 float yaw = prevYaw;
                 boolean invert = false;
@@ -101,7 +100,7 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
                     setVelocityClient(0.0, 0.0, 0.0);
                 }
 
-                float multiplier = speedEnabled ? 1.0f * LiteModFlyMod.config.getConfig().flySpeedMultiplier : 1.0f;
+                float multiplier = speedEnabled ? 1.0f * FlyModImpl.config.getConfig().flySpeedMultiplier : 1.0f;
                 x *= multiplier;
                 y *= multiplier;
                 z *= multiplier;
@@ -109,13 +108,13 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
             }else{
                 super.move(type, new Vec3d(x, y, z));
             }
-        }else if(LiteModFlyMod.flying == 0){
-            LiteModFlyMod.flying = - 1;
+        }else if(FlyModImpl.flying == 0){
+            FlyModImpl.flying = - 1;
             fallDistance = 0.0f;
-        }else if (LiteModFlyMod.flying < 0) {
+        }else if (FlyModImpl.flying < 0) {
             if (speedEnabled) {
-                x *= LiteModFlyMod.config.getConfig().runSpeedMultiplier;
-                z *= LiteModFlyMod.config.getConfig().runSpeedMultiplier;
+                x *= FlyModImpl.config.getConfig().runSpeedMultiplier;
+                z *= FlyModImpl.config.getConfig().runSpeedMultiplier;
                 setSprinting(false);
             }
             super.move(type, new Vec3d(x, y, z));

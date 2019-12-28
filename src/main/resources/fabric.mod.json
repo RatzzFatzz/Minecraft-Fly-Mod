@@ -16,10 +16,10 @@
   },
   "entrypoints": {
     "client": [
-      "at.pcgf.flymod.LiteModFlyMod"
+      "at.pcgf.flymod.FlyModImpl"
     ],
     "modmenu": [
-      "at.pcgf.flymod.gui.Settings"
+      "at.pcgf.flymod.gui.SettingsModMenu"
     ]
   },
   "depends": {
