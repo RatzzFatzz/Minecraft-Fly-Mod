@@ -4,5 +4,6 @@
   "text.autoconfig.flymod.option.mouseControl": "Ein / Aus von Maussteuerung",
   "text.autoconfig.flymod.option.flyUpDownBlocks": "Anzahl an Blöcken die pro Tick hoch- / runtergeflogen wird",
   "text.autoconfig.flymod.option.stuff.flyMultiplier": "Fluggeschwindigkeitsmultiplikator",
-  "text.autoconfig.flymod.option.stuff.runSpeedMultiplier": "Renngeschwindigkeitsmultiplikator"
+  "text.autoconfig.flymod.option.stuff.runSpeedMultiplier": "Renngeschwindigkeitsmultiplikator",
+  "text.autoconfig.flymod.option.multiplyUpDown": "Hoch- / runterfliegen mit Sprinttaste erhöhen (Um Faktor des Flugmultiplikators)"
 }

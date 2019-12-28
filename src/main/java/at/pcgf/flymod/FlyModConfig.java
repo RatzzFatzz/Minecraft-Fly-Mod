@@ -35,5 +35,6 @@ public class FlyModConfig implements ConfigData {
     @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
     public int runSpeedMultiplier = 2;
 
+    public boolean multiplyUpDown = true;
 
 }

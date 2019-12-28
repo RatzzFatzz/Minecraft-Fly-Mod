@@ -49,9 +49,7 @@ dependencies {
     modCompile "prospector.modmenu:ModMenu:${project.mod_menu_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modCompile "net.fabricmc:sponge-mixin:${project.mixin_version}"
-//    modCompile "me.shedaniel.cloth:cloth-events:${project.clothevents_version}"
 
-//    include "me.shedaniel.cloth:cloth-events:${project.clothevents_version}"
     include "cloth-config:ClothConfig:${project.cloth_config_version}"
     include "me.sargunvohra.mcmods:auto-config:${project.auto_config_version}"
     include "prospector.modmenu:ModMenu:${project.mod_menu_version}"

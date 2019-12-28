@@ -4,5 +4,7 @@
   "text.autoconfig.flymod.option.mouseControl": "Toggle mouse control",
   "text.autoconfig.flymod.option.flyUpDownBlocks": "Amount of blocks to fly up or down per tick",
   "text.autoconfig.flymod.option.stuff.flyMultiplier": "Fly speed multiplier",
-  "text.autoconfig.flymod.option.stuff.runSpeedMultiplier": "Run speed multiplier"
+  "text.autoconfig.flymod.option.stuff.runSpeedMultiplier": "Run speed multiplier",
+  "text.autoconfig.flymod.option.multiplyUpDown": "Speed up flying down and up (by fly speed multiplier)"
+
 }

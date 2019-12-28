@@ -39,7 +39,7 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
     @Override
     public void move(MovementType type, Vec3d vec3d) {
         double x = vec3d.getX();
-        double y;
+        double y = vec3d.getY();
         double z = vec3d.getZ();
         boolean speedEnabled = MinecraftClient.getInstance().options.keySprint.isPressed();
         if(LiteModFlyMod.flying > 0){
@@ -48,10 +48,13 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
             boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
             boolean rightMovement = MinecraftClient.getInstance().options.keyRight.isPressed();
             y = 0.0;
+            double flyUpDownBlocks = LiteModFlyMod.config.getConfig().multiplyUpDown && speedEnabled ?
+                    LiteModFlyMod.config.getConfig().flyUpDownBlocks * LiteModFlyMod.config.getConfig().flySpeedMultiplier:
+                    LiteModFlyMod.config.getConfig().flyUpDownBlocks;
             if(MinecraftClient.getInstance().options.keySneak.isPressed()){
-                y -= LiteModFlyMod.config.getConfig().flyUpDownBlocks;
+                y -= flyUpDownBlocks;
             }else if(MinecraftClient.getInstance().options.keyJump.isPressed()){
-                y += LiteModFlyMod.config.getConfig().flyUpDownBlocks;
+                y += flyUpDownBlocks;
             }
             if(LiteModFlyMod.config.getConfig().mouseControl && y == 0){
                 float pitch = prevPitch;
@@ -94,8 +97,6 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
                 setSneaking(false);
                 setSprinting(false);
 
-                ((PlayerEntity)(Object)this).sendAbilitiesUpdate();
-
                 if(! (backwardsMovement || forwardsMovement || leftMovement || rightMovement)){
                     setVelocityClient(0.0, 0.0, 0.0);
                 }
@@ -112,12 +113,12 @@ public abstract class MixinAbstractClientPlayer extends LivingEntity {
             LiteModFlyMod.flying = - 1;
             fallDistance = 0.0f;
         }else if (LiteModFlyMod.flying < 0) {
-            if (onGround && speedEnabled) {
+            if (speedEnabled) {
                 x *= LiteModFlyMod.config.getConfig().runSpeedMultiplier;
                 z *= LiteModFlyMod.config.getConfig().runSpeedMultiplier;
                 setSprinting(false);
             }
-            super.move(type, vec3d);
+            super.move(type, new Vec3d(x, y, z));
         }else{
             super.move(type, vec3d);
         }
