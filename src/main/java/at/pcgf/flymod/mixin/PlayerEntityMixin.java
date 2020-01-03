@@ -18,6 +18,7 @@
 package at.pcgf.flymod.mixin;
 
 import at.pcgf.flymod.FlyModImpl;
+import at.pcgf.flymod.gui.FlyModConfigManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -47,7 +48,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
             boolean rightMovement = MinecraftClient.getInstance().options.keyRight.isPressed();
             y = 0.0;
-            double flyUpDownBlocks = FlyModImpl.config.getConfig().flyUpDownBlocks;
+            double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
             if(MinecraftClient.getInstance().options.keySneak.isPressed()){
                 y -= flyUpDownBlocks;
             }else if(MinecraftClient.getInstance().options.keyJump.isPressed()){
@@ -57,7 +58,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             setSneaking(false);
             setSprinting(false);
 
-            if(FlyModImpl.config.getConfig().mouseControl){
+            if(FlyModConfigManager.getConfig().mouseControl){
                 float pitch = prevPitch;
                 float yaw = prevYaw;
                 boolean invert = false;
@@ -111,8 +112,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             fallDistance = 0.0f;
         }else if(FlyModImpl.flying < 0){
             if(speedEnabled){
-                x *= FlyModImpl.config.getConfig().runSpeedMultiplier;
-                z *= FlyModImpl.config.getConfig().runSpeedMultiplier;
+                x *= FlyModConfigManager.getConfig().runSpeedMultiplier;
+                z *= FlyModConfigManager.getConfig().runSpeedMultiplier;
                 setSprinting(false);
             }
             super.move(type, new Vec3d(x, y, z));
@@ -129,7 +130,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             y = calcFlyUpDown(y);
             setSneaking(false);
             setSprinting(false);
-            if(FlyModImpl.config.getConfig().mouseControl){
+            if(FlyModConfigManager.getConfig().mouseControl){
                 Vec3d vec = calcMouseMovement(x, y, z);
                 fallDistance = 0.0f;
                 if(! (MinecraftClient.getInstance().options.keyBack.isPressed() &&
@@ -147,8 +148,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             fallDistance = 0.0f;
         }else if(FlyModImpl.flying < 0){
             if(MinecraftClient.getInstance().options.keySprint.isPressed()){
-                x *= FlyModImpl.config.getConfig().runSpeedMultiplier;
-                z *= FlyModImpl.config.getConfig().runSpeedMultiplier;
+                x *= FlyModConfigManager.getConfig().runSpeedMultiplier;
+                z *= FlyModConfigManager.getConfig().runSpeedMultiplier;
                 setSprinting(false);
             }
             super.move(type, new Vec3d(x, y, z));
@@ -201,7 +202,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
     private double calcFlyUpDown(double y) {
-        double flyUpDownBlocks = FlyModImpl.config.getConfig().flyUpDownBlocks;
+        double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
         if(MinecraftClient.getInstance().options.keySneak.isPressed()){
             y -= flyUpDownBlocks;
         }else if(MinecraftClient.getInstance().options.keyJump.isPressed()){
@@ -212,8 +213,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     private Vec3d applyFlyMultiplier(double x, double y, double z) {
         boolean speedEnabled = MinecraftClient.getInstance().options.keySprint.isPressed();
-        float multiplier = speedEnabled ? FlyModImpl.config.getConfig().flySpeedMultiplier : 1.0f;
-        float upDownMultiplier = FlyModImpl.config.getConfig().multiplyUpDown && speedEnabled ? multiplier : 1.0f;
+        float multiplier = speedEnabled ? FlyModConfigManager.getConfig().flySpeedMultiplier : 1.0f;
+        float upDownMultiplier = FlyModConfigManager.getConfig().multiplyUpDown && speedEnabled ? multiplier : 1.0f;
         x *= multiplier;
         y *= upDownMultiplier;
         z *= multiplier;

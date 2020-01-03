@@ -44,15 +44,11 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}"
     modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    modCompile "cloth-config:ClothConfig:${project.cloth_config_version}"
-    modCompile "me.sargunvohra.mcmods:auto-config:${project.auto_config_version}"
-    modCompile "prospector.modmenu:ModMenu:${project.mod_menu_version}"
+    modCompile "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modCompile "net.fabricmc:sponge-mixin:${project.mixin_version}"
 
-    include "cloth-config:ClothConfig:${project.cloth_config_version}"
-    include "me.sargunvohra.mcmods:auto-config:${project.auto_config_version}"
-    include "prospector.modmenu:ModMenu:${project.mod_menu_version}"
+    include "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
     include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     include "net.fabricmc:sponge-mixin:${project.mixin_version}"
 
