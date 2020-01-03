@@ -3,8 +3,8 @@
   "minVersion": "0.6",
   "package": "at.pcgf.flymod.mixin",
   "refmap": "mixins.flymod.refmap.json",
-  "mixins": [
-    "MixinAbstractClientPlayer"
+  "client": [
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

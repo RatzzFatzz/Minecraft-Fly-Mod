@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "flymod",
+  "version": "${version}",
+  "name": "Fly Mod",
+  "description": "This Mod allows you to enable a 3D fly and let you customize the fly and run speed.",
+  "authors": [
+    "MarkusWME",
+    "RatzzFatzz"
+  ],
+  "mixins": [
+    "flymod.mixin.json"
+  ],
+  "custom": {
+    "modmenu:clientsideOnly": true
+  },
+  "entrypoints": {
+    "client": [
+      "at.pcgf.flymod.FlyModImpl"
+    ],
+    "modmenu": [
+      "at.pcgf.flymod.gui.SettingsModMenu"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.7.2",
+    "fabric": "*",
+    "minecraft": "1.14.x",
+    "modmenu": "*"
+  }
+}

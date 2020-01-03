@@ -12,26 +12,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package at.pcgf.flymod;
+package at.pcgf.flymod.gui;
 
-import me.sargunvohra.mcmods.autoconfig1.ConfigData;
-import me.sargunvohra.mcmods.autoconfig1.annotation.Config;
-import me.sargunvohra.mcmods.autoconfig1.annotation.ConfigEntry;
+import at.pcgf.flymod.FlyModConfig;
+import io.github.prospector.modmenu.api.ModMenuApi;
+import me.sargunvohra.mcmods.autoconfig1.AutoConfig;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.screen.Screen;
 
-@Config(name = "flymod")
-@Config.Gui.Background("minecraft:textures/block/oak_planks.png")
-public class FlyModConfig implements ConfigData {
+import java.util.function.Function;
 
-    public boolean mouseControl = true;
+@Environment(EnvType.CLIENT)
+public class SettingsModMenu implements ModMenuApi {
+    @Override
+    public String getModId() {
+        return "flymod";
+    }
 
-    public float flyUpDownBlocks = 0.4f;
-
-    @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
-    public int flySpeedMultiplier = 3;
-
-    @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
-    public int runSpeedMultiplier = 2;
-
-    public boolean multiplyUpDown = true;
-
+    @Override
+    public Function<Screen, ? extends Screen> getConfigScreenFactory() {
+        return screen -> AutoConfig.getConfigScreen(FlyModConfig.class, screen).get();
+    }
 }
