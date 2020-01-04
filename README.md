@@ -1,15 +1,12 @@
 # Minecraft - Fly-Mod
 This Mod for Minecraft allows you to enable a 3D fly and let you customize the fly and run speed.
 
-[![Build Status](https://ci.pcgamingfreaks.at/job/Minecraft-Fly-Mod/badge/icon)](https://ci.pcgamingfreaks.at/job/Minecraft-Fly-Mod/)
-
 ## Requirements
 * Any of the listed Minecraft versions
-    * 1.11
-    * 1.11.2
-    * 1.12
-    * 1.12.1
-* LiteLoader for your Minecraft version
+    * 1.14.4
+    * 1.15.1
+* Fabric
+* ModMenu
 * Java 8
 
 ## Supported languages
@@ -17,4 +14,4 @@ This Mod for Minecraft allows you to enable a 3D fly and let you customize the f
 * English
 
 ## External links
-You can also have a look at the description at [curseforge](https://minecraft.curseforge.com/projects/fly-mod "Show the Mod on curseforge").
+You can also have a look at the description at [curseforge](https://www.curseforge.com/minecraft/mc-mods/fly-mod-3d "Show the Mod on curseforge").
