@@ -1,9 +1,9 @@
 {
-  "text.autoconfig.flymod.title": "Fly Mod Configuration",
-  "text.autoconfig.flymod.category.default": "Main",
-  "text.autoconfig.flymod.option.mouseControl": "Toggle mouse control",
-  "text.autoconfig.flymod.option.flyUpDownBlocks": "Amount of blocks to fly up or down per tick",
-  "text.autoconfig.flymod.option.flySpeedMultiplier": "Fly speed multiplier",
-  "text.autoconfig.flymod.option.runSpeedMultiplier": "Run speed multiplier",
-  "text.autoconfig.flymod.option.multiplyUpDown": "Speed up flying down and up (by fly speed multiplier)"
+  "text.flymod.title": "Fly Mod Configuration",
+  "text.flymod.category.default": "Main",
+  "text.flymod.option.mouseControl": "Toggle mouse control",
+  "text.flymod.option.flyUpDownBlocks": "Amount of blocks to fly up or down per tick",
+  "text.flymod.option.flySpeedMultiplier": "Fly speed multiplier",
+  "text.flymod.option.runSpeedMultiplier": "Run speed multiplier",
+  "text.flymod.option.multiplyUpDown": "Speed up flying down and up (by fly speed multiplier)"
 }

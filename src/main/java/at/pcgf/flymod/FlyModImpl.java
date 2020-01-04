@@ -14,11 +14,9 @@
 
 package at.pcgf.flymod;
 
-import me.sargunvohra.mcmods.autoconfig1.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1.ConfigHolder;
-import me.sargunvohra.mcmods.autoconfig1.serializer.GsonConfigSerializer;
+import at.pcgf.flymod.gui.FlyModConfig;
+import at.pcgf.flymod.gui.FlyModConfigManager;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
@@ -26,7 +24,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
-public class FlyModImpl implements ModInitializer, ClientModInitializer {
+public class FlyModImpl implements ClientModInitializer {
     public static FabricKeyBinding flyKey = FabricKeyBinding.Builder.create(
             new Identifier("flykey"),
             InputUtil.Type.KEYSYM,
@@ -36,12 +34,11 @@ public class FlyModImpl implements ModInitializer, ClientModInitializer {
 
 
     public static byte flying = -1;
-    public static ConfigHolder<FlyModConfig> config;
+    public static final String MOD_ID = "flymod";
 
     @Override
     public void onInitializeClient() {
-        config = AutoConfig.register(FlyModConfig.class, GsonConfigSerializer::new);
-
+        FlyModConfig config = FlyModConfigManager.init();
         KeyBindingRegistry.INSTANCE.register(flyKey);
         ClientTickCallback.EVENT.register(e -> {
             if(flyKey.wasPressed()){
@@ -49,12 +46,6 @@ public class FlyModImpl implements ModInitializer, ClientModInitializer {
                 flying = (byte) (flying > 0 ? 0 : 1);
             }
         });
-
-    }
-
-    @Override
-    public void onInitialize() {
-        AutoConfig.getGuiRegistry(FlyModConfig.class);
 
     }
 }
