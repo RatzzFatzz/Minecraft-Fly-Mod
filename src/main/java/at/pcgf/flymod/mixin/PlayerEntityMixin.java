@@ -16,9 +16,9 @@ package at.pcgf.flymod.mixin;
 
 import at.pcgf.flymod.FlyModImpl;
 import at.pcgf.flymod.gui.FlyModConfigManager;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
@@ -26,11 +26,12 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
 @SuppressWarnings("unused")
-@Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
+@Mixin(AbstractClientPlayerEntity.class)
+public abstract class PlayerEntityMixin extends PlayerEntity {
 
-    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
-        super(entityType, world);
+
+    public PlayerEntityMixin(World world, GameProfile profile) {
+        super(world, profile);
     }
 
     @Override
@@ -44,6 +45,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             boolean forwardsMovement = MinecraftClient.getInstance().options.keyForward.isPressed();
             boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
             boolean rightMovement = MinecraftClient.getInstance().options.keyRight.isPressed();
+
             y = 0.0;
             double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
             if(MinecraftClient.getInstance().options.keySneak.isPressed()){
