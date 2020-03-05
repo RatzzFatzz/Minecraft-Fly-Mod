@@ -19,8 +19,10 @@ import at.pcgf.flymod.gui.FlyModConfigManager;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,86 +42,92 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         double y = vec3d.getY();
         double z = vec3d.getZ();
         boolean speedEnabled = MinecraftClient.getInstance().options.keySprint.isPressed();
-        if(FlyModImpl.flying > 0){
-            boolean backwardsMovement = MinecraftClient.getInstance().options.keyBack.isPressed();
-            boolean forwardsMovement = MinecraftClient.getInstance().options.keyForward.isPressed();
-            boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
-            boolean rightMovement = MinecraftClient.getInstance().options.keyRight.isPressed();
 
-            y = 0.0;
-            double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
-            if(MinecraftClient.getInstance().options.keySneak.isPressed()){
-                y -= flyUpDownBlocks;
-            }else if(MinecraftClient.getInstance().options.keyJump.isPressed()){
-                y += flyUpDownBlocks;
-            }
-
-            setSneaking(false);
-            setSprinting(false);
-
-            if(FlyModConfigManager.getConfig().mouseControl){
-                float pitch = prevPitch;
-                float yaw = prevYaw;
-                boolean invert = false;
-                if(forwardsMovement){
-                    if(rightMovement){
-                        yaw += 45.0f;
-                    }else if(leftMovement){
-                        yaw += 315.0f;
-                    }
-                }else if(backwardsMovement){
-                    if(rightMovement){
-                        yaw += 315.0f;
-                    }else if(leftMovement){
-                        yaw += 45.0f;
-                    }
-                    invert = true;
-                }else if(rightMovement){
-                    pitch = 0.0f;
-                    yaw += 90.0f;
-                }else if(leftMovement){
-                    pitch = 0.0f;
-                    yaw += 270.0f;
-                }
-                if(yaw > 180.0f){
-                    yaw -= 360.0f;
-                }
-                Vec3d e = Vec3d.fromPolar(pitch, yaw).normalize();
-                double length = Math.sqrt((x * x) + (z * z));
-                if(invert){
-                    length = - length;
-                }
-                x = e.getX() * length;
-                y += e.getY() * length;
-                z = e.getZ() * length;
-
-                fallDistance = 0.0f;
-
-
-                if(! (backwardsMovement || forwardsMovement || leftMovement || rightMovement)){
-                    setVelocityClient(0.0, 0.0, 0.0);
-                }
-
-                Vec3d vec = applyFlyMultiplier(x, y, z);
-                super.move(type, vec);
-            }else{
-                Vec3d vec = applyFlyMultiplier(x, y, z);
-                super.move(type, vec);
-            }
-        }else if(FlyModImpl.flying == 0){
-            FlyModImpl.flying = - 1;
-            fallDistance = 0.0f;
-        }else if(FlyModImpl.flying < 0){
-            if(speedEnabled){
-                x *= FlyModConfigManager.getConfig().runSpeedMultiplier;
-                z *= FlyModConfigManager.getConfig().runSpeedMultiplier;
-                setSprinting(false);
-            }
-            super.move(type, new Vec3d(x, y, z));
-        }else{
+        if(getEquippedStack(EquipmentSlot.CHEST).getItem() == Items.ELYTRA){
             super.move(type, vec3d);
+        }else{
+            if(FlyModImpl.flying > 0){
+                boolean backwardsMovement = MinecraftClient.getInstance().options.keyBack.isPressed();
+                boolean forwardsMovement = MinecraftClient.getInstance().options.keyForward.isPressed();
+                boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
+                boolean rightMovement = MinecraftClient.getInstance().options.keyRight.isPressed();
+
+                y = 0.0;
+                double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
+                if(MinecraftClient.getInstance().options.keySneak.isPressed()){
+                    y -= flyUpDownBlocks;
+                }else if(MinecraftClient.getInstance().options.keyJump.isPressed()){
+                    y += flyUpDownBlocks;
+                }
+
+                setSneaking(false);
+                setSprinting(false);
+
+                if(FlyModConfigManager.getConfig().mouseControl){
+                    float pitch = prevPitch;
+                    float yaw = prevYaw;
+                    boolean invert = false;
+                    if(forwardsMovement){
+                        if(rightMovement){
+                            yaw += 45.0f;
+                        }else if(leftMovement){
+                            yaw += 315.0f;
+                        }
+                    }else if(backwardsMovement){
+                        if(rightMovement){
+                            yaw += 315.0f;
+                        }else if(leftMovement){
+                            yaw += 45.0f;
+                        }
+                        invert = true;
+                    }else if(rightMovement){
+                        pitch = 0.0f;
+                        yaw += 90.0f;
+                    }else if(leftMovement){
+                        pitch = 0.0f;
+                        yaw += 270.0f;
+                    }
+                    if(yaw > 180.0f){
+                        yaw -= 360.0f;
+                    }
+                    Vec3d e = Vec3d.fromPolar(pitch, yaw).normalize();
+                    double length = Math.sqrt((x * x) + (z * z));
+                    if(invert){
+                        length = - length;
+                    }
+                    x = e.getX() * length;
+                    y += e.getY() * length;
+                    z = e.getZ() * length;
+
+                    fallDistance = 0.0f;
+
+
+                    if(! (backwardsMovement || forwardsMovement || leftMovement || rightMovement)){
+                        setVelocityClient(0.0, 0.0, 0.0);
+                    }
+
+                    Vec3d vec = applyFlyMultiplier(x, y, z);
+                    super.move(type, vec);
+                }else{
+                    Vec3d vec = applyFlyMultiplier(x, y, z);
+                    super.move(type, vec);
+                }
+            }else if(FlyModImpl.flying == 0){
+                FlyModImpl.flying = - 1;
+                fallDistance = 0.0f;
+            }else if(FlyModImpl.flying < 0){
+                if(speedEnabled){
+                    x *= FlyModConfigManager.getConfig().runSpeedMultiplier;
+                    z *= FlyModConfigManager.getConfig().runSpeedMultiplier;
+                    setSprinting(false);
+                }
+                super.move(type, new Vec3d(x, y, z));
+            }else{
+                super.move(type, vec3d);
+            }
         }
     }
+
 
     private Vec3d applyFlyMultiplier(double x, double y, double z) {
         boolean speedEnabled = MinecraftClient.getInstance().options.keySprint.isPressed();
