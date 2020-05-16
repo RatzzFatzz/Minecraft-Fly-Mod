@@ -33,7 +33,7 @@ public class FlyModImpl implements ClientModInitializer {
     ).build();
 
 
-    public static byte flying = -1;
+    public static byte flying = 0;
     public static final String MOD_ID = "flymod";
 
     @Override
@@ -43,7 +43,7 @@ public class FlyModImpl implements ClientModInitializer {
         ClientTickCallback.EVENT.register(e -> {
             if(flyKey.wasPressed()){
                 System.out.println("b is pressed");
-                flying = (byte) (flying > 0 ? 0 : 1);
+                flying = (byte) (flying == 1 ? - 1 : 1);
             }
         });
 

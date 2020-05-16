@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @SuppressWarnings("unused")
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class PlayerEntityMixin extends PlayerEntity {
-
+    private boolean lastTickFlying = false;
 
     public PlayerEntityMixin(World world, GameProfile profile) {
         super(world, profile);
@@ -43,10 +43,21 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         double z = vec3d.getZ();
         boolean speedEnabled = MinecraftClient.getInstance().options.keySprint.isPressed();
 
+
+        if(abilities.flying && FlyModImpl.flying == 0){
+            FlyModImpl.flying = 1;
+        }
+        if(abilities.flying && ! lastTickFlying){
+            FlyModImpl.flying = 1;
+            lastTickFlying = abilities.flying;
+        }
+
         if(getEquippedStack(EquipmentSlot.CHEST).getItem() == Items.ELYTRA){
             super.move(type, vec3d);
         }else{
             if(FlyModImpl.flying > 0){
+                abilities.flying = true;
+                sendAbilitiesUpdate();
                 boolean backwardsMovement = MinecraftClient.getInstance().options.keyBack.isPressed();
                 boolean forwardsMovement = MinecraftClient.getInstance().options.keyForward.isPressed();
                 boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
@@ -100,7 +111,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
                     z = e.getZ() * length;
 
                     fallDistance = 0.0f;
-
+                    sendAbilitiesUpdate();
 
                     if(! (backwardsMovement || forwardsMovement || leftMovement || rightMovement)){
                         setVelocityClient(0.0, 0.0, 0.0);
@@ -114,8 +125,13 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
                 }
             }else if(FlyModImpl.flying == 0){
                 FlyModImpl.flying = - 1;
+                lastTickFlying = false;
+                abilities.flying = false;
                 fallDistance = 0.0f;
+                sendAbilitiesUpdate();
             }else if(FlyModImpl.flying < 0){
+                lastTickFlying = false;
+                abilities.flying = false;
                 if(speedEnabled){
                     x *= FlyModConfigManager.getConfig().runSpeedMultiplier;
                     z *= FlyModConfigManager.getConfig().runSpeedMultiplier;
