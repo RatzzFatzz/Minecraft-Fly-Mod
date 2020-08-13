@@ -1,11 +1,15 @@
 pluginManagement {
     repositories {
         jcenter()
+        mavenCentral()
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
         maven { url = 'https://minecraft.curseforge.com/api/maven' }
+        maven { url = "https://maven.fabricmc.net/" }
+        maven { url = "https://minecraft.curseforge.com/api/maven" }
         gradlePluginPortal()
     }
+
 }

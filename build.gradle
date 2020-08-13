@@ -10,17 +10,6 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-minecraft {
-}
-
-repositories {
-    mavenCentral()
-    jcenter()
-    maven{url = "http://maven.fabricmc.net"}
-    maven{url = "https://minecraft.curseforge.com/api/maven"}
-    maven{url = "https://maven.fabricmc.net/io/github/prospector/modmenu/ModMenu/"}
-}
-
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}"
@@ -29,6 +18,7 @@ dependencies {
     modCompile "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modCompile "net.fabricmc:sponge-mixin:${project.mixin_version}"
+    modCompile "io.github.prospector:modmenu:${project.mod_menu_version}"
 
     include "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
     include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
