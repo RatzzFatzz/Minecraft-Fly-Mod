@@ -39,14 +39,14 @@ public class FlyModConfig {
     public boolean multiplyUpDown = true;
 
     static Screen createConfigScreen(Screen parent) {
-        ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(ConfigTexts.TITLE.asString());
+        ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(ConfigTexts.TITLE);
         FlyModConfig config = FlyModConfigManager.getConfig();
-        builder.getOrCreateCategory(ConfigTexts.CATEGORY.asString())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MOUSE_CONTROL.asString(), config.mouseControl).setDefaultValue(true).setSaveConsumer(b -> config.mouseControl = b).build())
-                .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_UP_DOWN_BLOCKS.asString(), config.flyUpDownBlocks).setDefaultValue(0.4f).setSaveConsumer(b -> config.flyUpDownBlocks = b).build())
-                .addEntry(ConfigEntryBuilder.create().startIntField(ConfigTexts.FLY_SPEED_MULTIPLIER.asString(), config.flySpeedMultiplier).setDefaultValue(3).setSaveConsumer(b -> config.flySpeedMultiplier = b).build())
-                .addEntry(ConfigEntryBuilder.create().startIntField(ConfigTexts.RUN_SPEED_MULTIPLIER.asString(), config.runSpeedMultiplier).setDefaultValue(2).setSaveConsumer(b -> config.runSpeedMultiplier = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MULTIPLY_UP_DOWN1.asString(), config.multiplyUpDown).setDefaultValue(true).setSaveConsumer(b -> config.multiplyUpDown = b).build());
+        builder.getOrCreateCategory(ConfigTexts.CATEGORY)
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MOUSE_CONTROL, config.mouseControl).setDefaultValue(true).setSaveConsumer(b -> config.mouseControl = b).build())
+                .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_UP_DOWN_BLOCKS, config.flyUpDownBlocks).setDefaultValue(0.4f).setSaveConsumer(b -> config.flyUpDownBlocks = b).build())
+                .addEntry(ConfigEntryBuilder.create().startIntField(ConfigTexts.FLY_SPEED_MULTIPLIER, config.flySpeedMultiplier).setDefaultValue(3).setSaveConsumer(b -> config.flySpeedMultiplier = b).build())
+                .addEntry(ConfigEntryBuilder.create().startIntField(ConfigTexts.RUN_SPEED_MULTIPLIER, config.runSpeedMultiplier).setDefaultValue(2).setSaveConsumer(b -> config.runSpeedMultiplier = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MULTIPLY_UP_DOWN1, config.multiplyUpDown).setDefaultValue(true).setSaveConsumer(b -> config.multiplyUpDown = b).build());
         builder.setSavingRunnable((FlyModConfigManager::save));
         return builder.build();
     }
