@@ -30,9 +30,8 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class PlayerEntityMixin extends PlayerEntity {
 
-
-    public PlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile) {
-        super(world, blockPos, f, gameProfile);
+    public PlayerEntityMixin(World world, BlockPos blockPos, GameProfile gameProfile) {
+        super(world, blockPos, gameProfile);
     }
 
     @Override
