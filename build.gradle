@@ -1,40 +1,48 @@
 plugins {
-    id 'fabric-loom' version '0.2.6-SNAPSHOT'
     id 'maven-publish'
+    id 'fabric-loom' version '0.5.9'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
+archivesBaseName = 'flymod'
+version = '1.5.0'
+group = 'at.pcgf.flymod'
 
-minecraft {
-}
-
-repositories {
-    mavenCentral()
-    jcenter()
-    maven{url = "http://maven.fabricmc.net"}
-    maven{url = "https://minecraft.curseforge.com/api/maven"}
-    maven{url = "http://maven.sargunv.s3-website-us-west-2.amazonaws.com/"}
-    maven{url = "https://maven.fabricmc.net/io/github/prospector/modmenu/ModMenu/"}
+ext {
+    minecraft_version = "1.16.3"
+    yarn_mappings = "1.16.3+build.10"
+    loader_version = "0.9.3+build.207"
+    fabric_version = "0.21.0+build.407-1.16"
+    cloth_config_version = "4.8.1"
+    mod_menu_version = "1.14.6+build.31"
+    mixin_version = "0.8.11"
+    clothevents_version = "1.4.8"
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+    minecraft(
+            [group: 'com.mojang', name: 'minecraft', version: "${minecraft_version}"]
+    )
 
-    modCompile "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modCompile "net.fabricmc:sponge-mixin:${project.mixin_version}"
+    mappings(
+            [group: 'net.fabricmc', name: 'yarn', version: "${yarn_mappings}"]
+    )
 
-    include "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
-    include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    include "net.fabricmc:sponge-mixin:${project.mixin_version}"
+    modCompile(
+            [group: 'net.fabricmc', name: 'fabric-loader', version: "${loader_version}"],
+            [group: 'me.shedaniel.cloth', name: 'config-2', version: "${cloth_config_version}"],
+            [group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: "${fabric_version}"],
+            [group: 'net.fabricmc', name: 'sponge-mixin', version: "${mixin_version}"],
+            [group: 'io.github.prospector', name: 'modmenu', version: "${mod_menu_version}"]
+    )
 
+    include(
+            [group: 'me.shedaniel.cloth', name: 'config-2', version: "${cloth_config_version}"],
+            [group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: "${fabric_version}"],
+            [group: 'net.fabricmc', name: 'sponge-mixin', version: "${mixin_version}"]
+    )
 }
 
 processResources {

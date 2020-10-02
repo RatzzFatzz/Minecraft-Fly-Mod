@@ -14,6 +14,7 @@
 
 package at.pcgf.flymod.mixin;
 
+import at.pcgf.flymod.DTO;
 import at.pcgf.flymod.FlyModImpl;
 import at.pcgf.flymod.gui.FlyModConfigManager;
 import com.mojang.authlib.GameProfile;
@@ -21,6 +22,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,13 +31,13 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class PlayerEntityMixin extends PlayerEntity {
 
-
-    public PlayerEntityMixin(World world, GameProfile profile) {
-        super(world, profile);
+    public PlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile) {
+        super(world, blockPos, f, gameProfile);
     }
 
     @Override
     public void move(MovementType type, Vec3d vec3d) {
+
         double x = vec3d.getX();
         double y = vec3d.getY();
         double z = vec3d.getZ();
@@ -56,6 +58,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
             setSneaking(false);
             setSprinting(false);
+            DTO.setIsInvulnerableToFallDamage(true);
 
             if(FlyModConfigManager.getConfig().mouseControl){
                 float pitch = prevPitch;
@@ -93,9 +96,6 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
                 y += e.getY() * length;
                 z = e.getZ() * length;
 
-                fallDistance = 0.0f;
-
-
                 if(! (backwardsMovement || forwardsMovement || leftMovement || rightMovement)){
                     setVelocityClient(0.0, 0.0, 0.0);
                 }
@@ -108,15 +108,17 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
             }
         }else if(FlyModImpl.flying == 0){
             FlyModImpl.flying = - 1;
-            fallDistance = 0.0f;
+            DTO.setIsInvulnerableToFallDamage(true);
         }else if(FlyModImpl.flying < 0){
             if(speedEnabled){
                 x *= FlyModConfigManager.getConfig().runSpeedMultiplier;
                 z *= FlyModConfigManager.getConfig().runSpeedMultiplier;
                 setSprinting(false);
             }
+            DTO.setIsInvulnerableToFallDamage(false);
             super.move(type, new Vec3d(x, y, z));
         }else{
+            DTO.setIsInvulnerableToFallDamage(false);
             super.move(type, vec3d);
         }
     }
