@@ -33,7 +33,7 @@ public class FlyModConfig {
     public float flySpeedMultiplier = 3;
 
     @Expose
-    public float runSpeedMultiplier = 2;
+    public float runSpeedMultiplier = 1.5F;
 
     @Expose
     public boolean multiplyUpDown = true;
