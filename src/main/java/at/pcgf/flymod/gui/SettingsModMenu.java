@@ -14,19 +14,13 @@
 
 package at.pcgf.flymod.gui;
 
-import io.github.prospector.modmenu.api.ModMenuApi;
-import net.minecraft.client.gui.screen.Screen;
 
-import java.util.function.Function;
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 
 public class SettingsModMenu implements ModMenuApi {
     @Override
-    public String getModId() {
-        return "flymod";
-    }
-
-    @Override
-    public Function<Screen, ? extends Screen> getConfigScreenFactory() {
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return FlyModConfig::createConfigScreen;
     }
 }

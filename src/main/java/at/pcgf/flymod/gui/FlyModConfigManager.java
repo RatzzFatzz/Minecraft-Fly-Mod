@@ -40,7 +40,7 @@ public class FlyModConfigManager {
     }
 
     public static FlyModConfig init() {
-        configFile = FabricLoader.getInstance().getConfigDirectory().toPath().resolve("flymod" + ".json");
+        configFile = FabricLoader.getInstance().getConfigDir().resolve("flymod" + ".json");
         if(! Files.exists(configFile)){
             System.out.println("Creating flymod config file");
             save().join();

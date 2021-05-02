@@ -11,9 +11,6 @@
   "mixins": [
     "flymod.mixin.json"
   ],
-  "custom": {
-    "modmenu:clientsideOnly": true
-  },
   "entrypoints": {
     "client": [
       "at.pcgf.flymod.FlyModImpl"
@@ -26,6 +23,6 @@
     "fabricloader": ">=0.7.2",
     "fabric": "*",
     "minecraft": ">=1.16.2",
-    "modmenu": ">=1.12.2+build.16"
+    "cloth-config2": ">=4.8.0"
   }
 }

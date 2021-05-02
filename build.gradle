@@ -7,8 +7,20 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = 'flymod'
-version = '1.6.0'
+version = '1.6.1'
 group = 'at.pcgf.flymod'
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        name = 'Fabric'
+        url = 'https://maven.fabricmc.net/'
+    }
+    maven { url 'https://minecraft.curseforge.com/api/maven' }
+    maven { url 'https://maven.shedaniel.me/' }
+    maven { url 'https://maven.terraformersmc.com/releases'}
+}
 
 ext {
     minecraft_version = "1.16.5"
@@ -17,9 +29,8 @@ ext {
     loader_version = "0.11.3"
     fabric_version = "0.29.4+1.16"
 
-    cloth_config_version = "4.8.3"
-    mod_menu_version = "1.15.0+build.1"
-    mixin_version = "0.8.11"
+    cloth_config_version = "4.11.19"
+    mod_menu_version = "1.16.9"
     clothevents_version = "1.4.9"
 }
 
@@ -35,15 +46,8 @@ dependencies {
     modCompile(
             [group: 'net.fabricmc', name: 'fabric-loader', version: "${loader_version}"],
             [group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: "${fabric_version}"],
-            [group: 'net.fabricmc', name: 'sponge-mixin', version: "${mixin_version}"],
-            [group: 'me.shedaniel.cloth', name: 'config-2', version: "${cloth_config_version}"],
-            [group: 'io.github.prospector', name: 'modmenu', version: "${mod_menu_version}"]
-    )
-
-    include(
-            [group: 'me.shedaniel.cloth', name: 'config-2', version: "${cloth_config_version}"],
-            [group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: "${fabric_version}"],
-            [group: 'net.fabricmc', name: 'sponge-mixin', version: "${mixin_version}"]
+            [group: 'me.shedaniel.cloth', name: 'cloth-config-fabric', version: "${cloth_config_version}"],
+            [group: 'com.terraformersmc', name: 'modmenu', version: "${mod_menu_version}"]
     )
 }
 
