@@ -14,7 +14,6 @@
 
 package at.pcgf.flymod.mixin;
 
-import at.pcgf.flymod.DTO;
 import at.pcgf.flymod.FlyModImpl;
 import at.pcgf.flymod.gui.FlyModConfigManager;
 import com.mojang.authlib.GameProfile;
@@ -42,7 +41,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         double y = vec3d.getY();
         double z = vec3d.getZ();
         boolean speedEnabled = MinecraftClient.getInstance().options.keySprint.isPressed();
-        if(FlyModImpl.flying > 0){
+        if (FlyModImpl.flying > 0) {
             boolean backwardsMovement = MinecraftClient.getInstance().options.keyBack.isPressed();
             boolean forwardsMovement = MinecraftClient.getInstance().options.keyForward.isPressed();
             boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
@@ -50,75 +49,75 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
             y = 0.0;
             double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
-            if(MinecraftClient.getInstance().options.keySneak.isPressed()){
+            if (MinecraftClient.getInstance().options.keySneak.isPressed()) {
                 y -= flyUpDownBlocks;
-            }else if(MinecraftClient.getInstance().options.keyJump.isPressed()){
+            } else if (MinecraftClient.getInstance().options.keyJump.isPressed()) {
                 y += flyUpDownBlocks;
             }
 
-            setSneaking(false);
-            setSprinting(false);
-            DTO.setIsInvulnerableToFallDamage(true);
 
-            if(FlyModConfigManager.getConfig().mouseControl){
+            if (FlyModConfigManager.getConfig().mouseControl) {
                 float pitch = prevPitch;
                 float yaw = prevYaw;
                 boolean invert = false;
-                if(forwardsMovement){
-                    if(rightMovement){
+                if (forwardsMovement) {
+                    if (rightMovement) {
                         yaw += 45.0f;
-                    }else if(leftMovement){
+                    } else if (leftMovement) {
                         yaw += 315.0f;
                     }
-                }else if(backwardsMovement){
-                    if(rightMovement){
+                } else if (backwardsMovement) {
+                    if (rightMovement) {
                         yaw += 315.0f;
-                    }else if(leftMovement){
+                    } else if (leftMovement) {
                         yaw += 45.0f;
                     }
                     invert = true;
-                }else if(rightMovement){
+                } else if (rightMovement) {
                     pitch = 0.0f;
                     yaw += 90.0f;
-                }else if(leftMovement){
+                } else if (leftMovement) {
                     pitch = 0.0f;
                     yaw += 270.0f;
                 }
-                if(yaw > 180.0f){
+                if (yaw > 180.0f) {
                     yaw -= 360.0f;
                 }
                 Vec3d e = Vec3d.fromPolar(pitch, yaw).normalize();
                 double length = Math.sqrt((x * x) + (z * z));
-                if(invert){
-                    length = - length;
+                if (invert) {
+                    length = -length;
                 }
                 x = e.getX() * length;
                 y += e.getY() * length;
                 z = e.getZ() * length;
 
-                if(! (backwardsMovement || forwardsMovement || leftMovement || rightMovement)){
+                if (!(backwardsMovement || forwardsMovement || leftMovement || rightMovement)) {
                     setVelocityClient(0.0, 0.0, 0.0);
                 }
-
-                Vec3d vec = applyFlyMultiplier(x, y, z);
-                super.move(type, vec);
-            }else{
-                Vec3d vec = applyFlyMultiplier(x, y, z);
-                super.move(type, vec);
             }
-        }else if(FlyModImpl.flying == 0){
-            FlyModImpl.flying = - 1;
-            DTO.setIsInvulnerableToFallDamage(true);
-        }else if(FlyModImpl.flying < 0){
-            if(speedEnabled){
+
+            setSneaking(false);
+            setSprinting(false);
+            abilities.flying = true;
+            sendAbilitiesUpdate();
+
+            Vec3d vec = applyFlyMultiplier(x, y, z);
+            super.move(type, vec);
+        } else if (FlyModImpl.flying == 0) {
+            FlyModImpl.flying = -1;
+            abilities.flying = false;
+            sendAbilitiesUpdate();
+        } else if (FlyModImpl.flying < 0) {
+            if (speedEnabled) {
                 x *= FlyModConfigManager.getConfig().runSpeedMultiplier;
                 z *= FlyModConfigManager.getConfig().runSpeedMultiplier;
                 setSprinting(false);
+            } else if (abilities.flying) {
+                FlyModImpl.flying = 1;
             }
-            DTO.setIsInvulnerableToFallDamage(false);
             super.move(type, new Vec3d(x, y, z));
-        }else{
-            DTO.setIsInvulnerableToFallDamage(false);
+        } else {
             super.move(type, vec3d);
         }
     }
