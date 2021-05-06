@@ -5,5 +5,7 @@
   "text.flymod.option.flyUpDownBlocks": "Amount of blocks to fly up or down per tick",
   "text.flymod.option.flySpeedMultiplier": "Fly speed multiplier",
   "text.flymod.option.runSpeedMultiplier": "Run speed multiplier",
-  "text.flymod.option.multiplyUpDown": "Speed up flying down and up (by fly speed multiplier)"
+  "text.flymod.option.multiplyUpDown": "Speed up flying down and up (by fly speed multiplier)",
+  "key.flymod.keybinding": "Fly Mod keybinding",
+  "key.flymod.toggle": "Toggle fly mod"
 }
