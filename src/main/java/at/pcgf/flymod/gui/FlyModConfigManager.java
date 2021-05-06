@@ -31,7 +31,11 @@ import java.util.concurrent.Executors;
 
 public class FlyModConfigManager {
     private static final Executor EXECUTOR = Executors.newSingleThreadExecutor(r -> new Thread(r, "Flymod Config Manager"));
-    private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+    private static final Gson GSON = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setPrettyPrinting()
+            .excludeFieldsWithoutExposeAnnotation()
+            .create();
     private static FlyModConfig config;
     private static Path configFile;
 
@@ -40,7 +44,7 @@ public class FlyModConfigManager {
     }
 
     public static FlyModConfig init() {
-        configFile = FabricLoader.getInstance().getConfigDirectory().toPath().resolve("flymod" + ".json");
+        configFile = FabricLoader.getInstance().getConfigDir().resolve("flymod" + ".json");
         if(! Files.exists(configFile)){
             System.out.println("Creating flymod config file");
             save().join();
