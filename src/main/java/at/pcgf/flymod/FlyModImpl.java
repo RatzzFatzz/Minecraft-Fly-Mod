@@ -39,9 +39,4 @@ public class FlyModImpl implements ClientModInitializer {
             }
         });
     }
-
-
-
-
-
 }

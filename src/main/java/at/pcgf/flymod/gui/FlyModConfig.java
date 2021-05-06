@@ -51,13 +51,18 @@ public class FlyModConfig {
         return builder.build();
     }
 
-    static private class ConfigTexts {
-        static final TranslatableText TITLE = new TranslatableText(String.format("text.%s.title", FlyModImpl.MOD_ID));
-        static final TranslatableText CATEGORY = new TranslatableText(String.format("text.%s.category.default", FlyModImpl.MOD_ID));
-        static final TranslatableText MOUSE_CONTROL = new TranslatableText(String.format("text.%s.option.mouseControl", FlyModImpl.MOD_ID));
-        static final TranslatableText FLY_UP_DOWN_BLOCKS = new TranslatableText(String.format("text.%s.option.flyUpDownBlocks", FlyModImpl.MOD_ID));
-        static final TranslatableText FLY_SPEED_MULTIPLIER = new TranslatableText(String.format("text.%s.option.flySpeedMultiplier", FlyModImpl.MOD_ID));
-        static final TranslatableText RUN_SPEED_MULTIPLIER = new TranslatableText(String.format("text.%s.option.runSpeedMultiplier", FlyModImpl.MOD_ID));
-        static final TranslatableText MULTIPLY_UP_DOWN1 = new TranslatableText(String.format("text.%s.option.multiplyUpDown", FlyModImpl.MOD_ID));
+    private static class ConfigTexts {
+        static final TranslatableText TITLE = createTranslatableText("text.%s.title");
+        static final TranslatableText CATEGORY = createTranslatableText("text.%s.category.default");
+        static final TranslatableText MOUSE_CONTROL = createTranslatableText("text.%s.option.mouseControl");
+        static final TranslatableText FLY_UP_DOWN_BLOCKS = createTranslatableText("text.%s.option.flyUpDownBlocks");
+        static final TranslatableText FLY_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.flySpeedMultiplier");
+        static final TranslatableText RUN_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.runSpeedMultiplier");
+        static final TranslatableText MULTIPLY_UP_DOWN1 = createTranslatableText("text.%s.option.multiplyUpDown");
+
+        private static TranslatableText createTranslatableText(String translationReference) {
+            return new TranslatableText(String.format(translationReference, FlyModImpl.MOD_ID));
+        }
     }
+
 }
