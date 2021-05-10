@@ -17,9 +17,7 @@ public abstract class LivingEntityMixin extends LivingEntity {
 
     @Override
     public void move(MovementType type, Vec3d vec3d) {
-        if (FlyModImpl.flying > 0) {
-            fallDistance = 0.0F;
-        } else if (FlyModImpl.flying == 0) {
+        if (FlyModImpl.FLYING) {
             fallDistance = 0.0F;
         }
         super.move(type, vec3d);

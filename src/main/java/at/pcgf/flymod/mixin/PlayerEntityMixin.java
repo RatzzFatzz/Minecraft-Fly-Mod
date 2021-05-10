@@ -27,8 +27,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
-import static at.pcgf.flymod.domain.FlyingState.*;
-
 @SuppressWarnings("unused")
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class PlayerEntityMixin extends PlayerEntity {
@@ -39,33 +37,32 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     @Override
     public void move(MovementType type, Vec3d vec3d) {
-        if (FlyModImpl.flying == FLYING) {
+        toggleFlying();
+
+        if (abilities.flying) {
             Vec3d vec = mouseControlMovement(vec3d);
             vec = verticalMovement(vec);
             vec = applyFlyMultiplier(vec);
 
             setSneaking(false);
             setSprinting(false);
-            abilities.flying = true;
-            sendAbilitiesUpdate();
             super.move(type, vec);
 
-        } else if (FlyModImpl.flying == NEUTRAL) {
-            FlyModImpl.flying = NOT_FLYING;
-            abilities.flying = false;
-            sendAbilitiesUpdate();
-        } else if (FlyModImpl.flying == NOT_FLYING) {
+        } else if (!abilities.flying) {
             Vec3d vec = vec3d;
             if (MinecraftClient.getInstance().options.keySprint.isPressed()) {
                 vec = applyRunMultiplier(vec, FlyModConfigManager.getConfig().runSpeedMultiplier);
                 setSprinting(false);
-            } else if (abilities.flying) {
-                FlyModImpl.flying = FLYING;
             }
             super.move(type, vec);
         } else {
             super.move(type, vec3d);
         }
+    }
+
+    private void toggleFlying() {
+        abilities.flying = FlyModImpl.FLYING;
+        sendAbilitiesUpdate();
     }
 
     private Vec3d mouseControlMovement(Vec3d vec3d) {
@@ -116,14 +113,11 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     public Vec3d verticalMovement(Vec3d vec3d) {
         double y = vec3d.getY();
-        sendMessage(Text.of("default: " + y), false);
         double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
         if (MinecraftClient.getInstance().options.keySneak.isPressed()) {
             y -= flyUpDownBlocks;
-            sendMessage(Text.of("up: " + y), false);
         } else if (MinecraftClient.getInstance().options.keyJump.isPressed()) {
             y += flyUpDownBlocks;
-            sendMessage(Text.of("down" + y), false);
         }
         return new Vec3d(vec3d.getX(), y, vec3d.getZ());
     }
