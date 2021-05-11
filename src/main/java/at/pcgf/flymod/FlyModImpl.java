@@ -21,8 +21,10 @@ import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
+import static at.pcgf.flymod.FlyingState.*;
+
 public class FlyModImpl implements ClientModInitializer {
-    public static boolean FLYING = false;
+    public static FlyingState flyingState = NOT_FLYING;
     public static final String MOD_ID = "flymod";
     private static final KeyBinding flyKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.flymod.toggle",
@@ -35,7 +37,7 @@ public class FlyModImpl implements ClientModInitializer {
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if(flyKey.wasPressed()) {
-                FLYING = !FLYING;
+                flyingState = flyingState == FLYING ? NEUTRAL : FLYING;
             }
         });
     }

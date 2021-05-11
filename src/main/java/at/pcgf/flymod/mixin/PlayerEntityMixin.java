@@ -21,11 +21,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+
+import static at.pcgf.flymod.FlyingState.*;
 
 @SuppressWarnings("unused")
 @Mixin(AbstractClientPlayerEntity.class)
@@ -61,7 +62,14 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
     }
 
     private void toggleFlying() {
-        abilities.flying = FlyModImpl.FLYING;
+        if (FlyModImpl.flyingState == FLYING) {
+            abilities.flying = true;
+        } else if (FlyModImpl.flyingState == NEUTRAL) {
+            FlyModImpl.flyingState = NOT_FLYING;
+            abilities.flying = false;
+        } else if (FlyModImpl.flyingState == NOT_FLYING && abilities.flying) {
+            FlyModImpl.flyingState = FLYING;
+        }
         sendAbilitiesUpdate();
     }
 

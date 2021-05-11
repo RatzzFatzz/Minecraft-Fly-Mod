@@ -1,6 +1,7 @@
 package at.pcgf.flymod.mixin;
 
 import at.pcgf.flymod.FlyModImpl;
+import at.pcgf.flymod.FlyingState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
@@ -17,7 +18,7 @@ public abstract class LivingEntityMixin extends LivingEntity {
 
     @Override
     public void move(MovementType type, Vec3d vec3d) {
-        if (FlyModImpl.FLYING) {
+        if (FlyModImpl.flyingState == FlyingState.FLYING) {
             fallDistance = 0.0F;
         }
         super.move(type, vec3d);
