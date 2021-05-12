@@ -48,7 +48,13 @@ dependencies {
             [group: 'me.shedaniel.cloth', name: 'cloth-config-fabric', version: "${cloth_config_version}"],
             [group: 'com.terraformersmc', name: 'modmenu', version: "${mod_menu_version}"]
     )
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.6.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    testCompile("org.junit.jupiter:junit-jupiter-params:5.7.0")
 }
+
 
 processResources {
     inputs.property "version", project.version
