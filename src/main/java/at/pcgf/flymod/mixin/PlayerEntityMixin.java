@@ -19,9 +19,11 @@ import at.pcgf.flymod.gui.FlyModConfigManager;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -75,51 +77,41 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     private Vec3d mouseControlMovement(Vec3d vec3d) {
         if (FlyModConfigManager.getConfig().mouseControl) {
-            boolean backwardsMovement = MinecraftClient.getInstance().options.keyBack.isPressed();
-            boolean forwardsMovement = MinecraftClient.getInstance().options.keyForward.isPressed();
-            boolean leftMovement = MinecraftClient.getInstance().options.keyLeft.isPressed();
-            boolean rightMovement = MinecraftClient.getInstance().options.keyRight.isPressed();
+            boolean backwards = MinecraftClient.getInstance().options.keyBack.isPressed();
+            boolean forwards = MinecraftClient.getInstance().options.keyForward.isPressed();
+            boolean left = MinecraftClient.getInstance().options.keyLeft.isPressed();
+            boolean right = MinecraftClient.getInstance().options.keyRight.isPressed();
             float pitch = prevPitch;
             float yaw = prevYaw;
-            boolean invert = false;
-            if (forwardsMovement) {
-                if (rightMovement) {
-                    yaw += 45.0f;
-                } else if (leftMovement) {
-                    yaw += 315.0f;
-                }
-            } else if (backwardsMovement) {
-                if (rightMovement) {
-                    yaw += 315.0f;
-                } else if (leftMovement) {
-                    yaw += 45.0f;
-                }
-                invert = true;
-            } else if (rightMovement) {
-                pitch = 0.0f;
-                yaw += 90.0f;
-            } else if (leftMovement) {
-                pitch = 0.0f;
-                yaw += 270.0f;
-            }
-            if (yaw > 180.0f) {
-                yaw -= 360.0f;
-            }
-            Vec3d e = Vec3d.fromPolar(pitch, yaw).normalize();
-            double length = Math.sqrt((vec3d.getX() * vec3d.getX()) + (vec3d.getZ() * vec3d.getZ()));
-            if (invert) {
-                length = -length;
-            }
-
-            if (!(backwardsMovement || forwardsMovement || leftMovement || rightMovement)) {
-                setVelocityClient(0.0, 0.0, 0.0);
-            }
-            return new Vec3d(e.getX() * length, e.getY() * length, e.getZ() * length);
+            Vector4f directionsVector = new Vector4f(
+                    (backwards ? 1 : 0) - (forwards ? 1 : 0),
+                    0,
+                    (left ? 1 : 0) - (right ? 1 : 0),
+                    1);
+            directionsVector.normalize();
+            float length = (float) Math.sqrt((vec3d.getX() * vec3d.getX()) + (vec3d.getZ() * vec3d.getZ()));
+            Vector4f movementVector = multiply4dVector(directionsVector, length);
+            // roll yaw pitch degree
+            movementVector.rotate(new Quaternion(0, -(yaw - 90), pitch, true));
+            return new Vec3d(
+                    movementVector.getX() / movementVector.getW(),
+                    movementVector.getY() / movementVector.getW(),
+                    movementVector.getZ() / movementVector.getW()
+            );
         }
         return vec3d;
     }
 
-    public Vec3d verticalMovement(Vec3d vec3d) {
+    private Vector4f multiply4dVector(Vector4f vector, float length) {
+        return new Vector4f(
+                vector.getX() * length,
+                vector.getY() * length,
+                vector.getZ() * length,
+                vector.getW() * length
+        );
+    }
+
+    private Vec3d verticalMovement(Vec3d vec3d) {
         double y = vec3d.getY();
         double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
         if (MinecraftClient.getInstance().options.keySneak.isPressed()) {
