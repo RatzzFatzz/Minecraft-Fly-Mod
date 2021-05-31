@@ -21,6 +21,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
@@ -43,7 +44,13 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         toggleFlying();
 
         if (abilities.flying) {
-            Vec3d vec = mouseControlMovement(vec3d);
+            boolean backwards = MinecraftClient.getInstance().options.keyBack.isPressed();
+            boolean forwards = MinecraftClient.getInstance().options.keyForward.isPressed();
+            boolean left = MinecraftClient.getInstance().options.keyLeft.isPressed();
+            boolean right = MinecraftClient.getInstance().options.keyRight.isPressed();
+
+            Vec3d vec = mouseControlMovement(vec3d, backwards, forwards, left, right);
+            fadeMovement(backwards || forwards || left || right);
             vec = verticalMovement(vec);
             vec = applyFlyMultiplier(vec);
 
@@ -75,12 +82,8 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         sendAbilitiesUpdate();
     }
 
-    private Vec3d mouseControlMovement(Vec3d vec3d) {
+    private Vec3d mouseControlMovement(Vec3d vec3d, boolean backwards, boolean forwards, boolean left, boolean right) {
         if (FlyModConfigManager.getConfig().mouseControl) {
-            boolean backwards = MinecraftClient.getInstance().options.keyBack.isPressed();
-            boolean forwards = MinecraftClient.getInstance().options.keyForward.isPressed();
-            boolean left = MinecraftClient.getInstance().options.keyLeft.isPressed();
-            boolean right = MinecraftClient.getInstance().options.keyRight.isPressed();
             float pitch = prevPitch;
             float yaw = prevYaw;
             Vector4f directionsVector = new Vector4f(
@@ -93,10 +96,14 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
             Vector4f movementVector = multiply4dVector(directionsVector, length);
             // roll yaw pitch degree
             movementVector.rotate(new Quaternion(0, -(yaw - 90), pitch, true));
+
+            float resultX = movementVector.getX() / movementVector.getW();
+            float resultY = movementVector.getY() / movementVector.getW();
+            float resultZ = movementVector.getZ() / movementVector.getW();
             return new Vec3d(
-                    movementVector.getX() / movementVector.getW(),
-                    movementVector.getY() / movementVector.getW(),
-                    movementVector.getZ() / movementVector.getW()
+                    Double.isNaN(resultX) ? 0 : resultX,
+                    Double.isNaN(resultY) ? 0 : resultY,
+                    Double.isNaN(resultZ) ? 0 : resultZ
             );
         }
         return vec3d;
@@ -109,6 +116,12 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
                 vector.getZ() * length,
                 vector.getW() * length
         );
+    }
+
+    private void fadeMovement(boolean isMoving) {
+        if (!isMoving) {
+            setVelocityClient(0.0, 0.0, 0.0);
+        }
     }
 
     private Vec3d verticalMovement(Vec3d vec3d) {
