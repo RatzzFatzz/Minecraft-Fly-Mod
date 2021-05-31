@@ -50,7 +50,6 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
             boolean right = MinecraftClient.getInstance().options.keyRight.isPressed();
 
             Vec3d vec = mouseControlMovement(vec3d, backwards, forwards, left, right);
-            fadeMovement(backwards || forwards || left || right);
             vec = verticalMovement(vec);
             vec = applyFlyMultiplier(vec);
 
@@ -116,12 +115,6 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
                 vector.getZ() * length,
                 vector.getW() * length
         );
-    }
-
-    private void fadeMovement(boolean isMoving) {
-        if (!isMoving) {
-            setVelocityClient(0.0, 0.0, 0.0);
-        }
     }
 
     private Vec3d verticalMovement(Vec3d vec3d) {
