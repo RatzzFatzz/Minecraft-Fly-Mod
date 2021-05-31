@@ -38,6 +38,9 @@ public class FlyModConfig {
     @Expose
     public boolean multiplyUpDown = true;
 
+    @Expose
+    public boolean fadeMovement = false;
+
     static Screen createConfigScreen(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(ConfigTexts.TITLE);
         FlyModConfig config = FlyModConfigManager.getConfig();
@@ -46,7 +49,8 @@ public class FlyModConfig {
                 .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_UP_DOWN_BLOCKS, config.flyUpDownBlocks).setDefaultValue(0.4f).setSaveConsumer(b -> config.flyUpDownBlocks = b).build())
                 .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_SPEED_MULTIPLIER, config.flySpeedMultiplier).setDefaultValue(3f).setSaveConsumer(b -> config.flySpeedMultiplier = b).build())
                 .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.RUN_SPEED_MULTIPLIER, config.runSpeedMultiplier).setDefaultValue(2f).setSaveConsumer(b -> config.runSpeedMultiplier = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MULTIPLY_UP_DOWN1, config.multiplyUpDown).setDefaultValue(true).setSaveConsumer(b -> config.multiplyUpDown = b).build());
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MULTIPLY_UP_DOWN1, config.multiplyUpDown).setDefaultValue(true).setSaveConsumer(b -> config.multiplyUpDown = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.FADE_MOVEMENT, config.fadeMovement).setDefaultValue(true).setSaveConsumer(b -> config.fadeMovement = b).build());
         builder.setSavingRunnable((FlyModConfigManager::save));
         return builder.build();
     }
@@ -59,6 +63,7 @@ public class FlyModConfig {
         static final TranslatableText FLY_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.flySpeedMultiplier");
         static final TranslatableText RUN_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.runSpeedMultiplier");
         static final TranslatableText MULTIPLY_UP_DOWN1 = createTranslatableText("text.%s.option.multiplyUpDown");
+        static final TranslatableText FADE_MOVEMENT = createTranslatableText("text.%s.option.fadeMovement");
 
         private static TranslatableText createTranslatableText(String translationReference) {
             return new TranslatableText(String.format(translationReference, FlyModImpl.MOD_ID));
