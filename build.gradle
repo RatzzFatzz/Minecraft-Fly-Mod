@@ -1,17 +1,16 @@
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '0.5.9'
+    id 'fabric-loom' version '0.8.17'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = 'flymod'
 version = '1.7'
 group = 'at.pcgf.flymod'
 
 repositories {
-    jcenter()
     mavenCentral()
     maven {
         name = 'Fabric'
@@ -23,14 +22,14 @@ repositories {
 }
 
 ext {
-    minecraft_version = '1.16.5'
+    minecraft_version = '1.17'
 
-    yarn_mappings = '1.16.5+build.8'
+    yarn_mappings = '1.17+build.9'
     loader_version = '0.11.3'
-    fabric_version = '0.29.4+1.16'
+    fabric_version = '0.34.9+1.17'
 
-    cloth_config_version = '4.11.19'
-    mod_menu_version = '1.16.9'
+    cloth_config_version = '5.0.34'
+    mod_menu_version = '2.0.2'
 }
 
 dependencies {
@@ -38,11 +37,10 @@ dependencies {
             [group: 'com.mojang', name: 'minecraft', version: "${minecraft_version}"]
     )
 
-    mappings(
-            [group: 'net.fabricmc', name: 'yarn', version: "${yarn_mappings}"]
-    )
+    mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
 
-    modCompile(
+
+    modImplementation(
             [group: 'net.fabricmc', name: 'fabric-loader', version: "${loader_version}"],
             [group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: "${fabric_version}"],
             [group: 'me.shedaniel.cloth', name: 'cloth-config-fabric', version: "${cloth_config_version}"],
@@ -53,30 +51,24 @@ dependencies {
 
 processResources {
     inputs.property "version", project.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
+    filesMatching("flymod.mod.json") {
         expand "version": project.version
     }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
-    }
 }
 
-// ensure that the encoding is set to UTF-8, no matter what the system default is
-// this fixes some edge cases with special characters not displaying correctly
-// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+tasks.withType(JavaCompile).configureEach {
+    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // this fixes some edge cases with special characters not displaying correctly
+    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+    // If Javadoc is generated, this must be specified in that task too.
+    it.options.encoding = "UTF-8"
+
+    // Minecraft 1.17 (21w19a) upwards uses Java 16.
+    it.options.release = 16
 }
 
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
-    from sourceSets.main.allSource
+java {
+    withSourcesJar()
 }
 
 jar {

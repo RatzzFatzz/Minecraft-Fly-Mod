@@ -18,13 +18,13 @@ import at.pcgf.flymod.gui.FlyModConfigManager;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vector4f;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -43,7 +43,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
     public void move(MovementType type, Vec3d vec3d) {
         toggleFlying();
 
-        if (abilities.flying) {
+        if (getAbilities().flying) {
             boolean backwards = MinecraftClient.getInstance().options.keyBack.isPressed();
             boolean forwards = MinecraftClient.getInstance().options.keyForward.isPressed();
             boolean left = MinecraftClient.getInstance().options.keyLeft.isPressed();
@@ -58,7 +58,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
             setSprinting(false);
             super.move(type, vec);
 
-        } else if (!abilities.flying) {
+        } else if (!getAbilities().flying) {
             Vec3d vec = vec3d;
             if (MinecraftClient.getInstance().options.keySprint.isPressed()) {
                 vec = applyRunMultiplier(vec, FlyModConfigManager.getConfig().runSpeedMultiplier);
@@ -72,11 +72,11 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     private void toggleFlying() {
         if (flyingState == FLYING) {
-            abilities.flying = true;
+            getAbilities().flying = true;
         } else if (flyingState == NEUTRAL) {
             flyingState = NOT_FLYING;
-            abilities.flying = false;
-        } else if (flyingState == NOT_FLYING && abilities.flying) {
+            getAbilities().flying = false;
+        } else if (flyingState == NOT_FLYING && getAbilities().flying) {
             flyingState = FLYING;
         }
         sendAbilitiesUpdate();
