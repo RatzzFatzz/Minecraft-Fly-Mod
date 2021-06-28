@@ -1,17 +1,16 @@
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '0.5.9'
+    id 'fabric-loom' version '0.8.1'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = 'flymod'
-version = '1.7'
-group = 'at.pcgf.flymod'
+version = modVersion
+group = modGroup
+archivesBaseName = modId
 
 repositories {
-    jcenter()
     mavenCentral()
     maven {
         name = 'Fabric'
@@ -42,7 +41,7 @@ dependencies {
             [group: 'net.fabricmc', name: 'yarn', version: "${yarn_mappings}"]
     )
 
-    modCompile(
+    modImplementation(
             [group: 'net.fabricmc', name: 'fabric-loader', version: "${loader_version}"],
             [group: 'net.fabricmc.fabric-api', name: 'fabric-api', version: "${fabric_version}"],
             [group: 'me.shedaniel.cloth', name: 'cloth-config-fabric', version: "${cloth_config_version}"],

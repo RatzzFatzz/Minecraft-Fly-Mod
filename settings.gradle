@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        jcenter()
         mavenCentral()
         maven {
             name = 'Fabric'
@@ -11,3 +10,6 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+include 'flymod-forge'
+include 'flymod-fabric'
