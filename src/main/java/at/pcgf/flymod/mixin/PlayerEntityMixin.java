@@ -20,6 +20,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.tag.Tag;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Quaternion;
@@ -61,6 +64,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         } else if (!getAbilities().flying) {
             Vec3d vec = vec3d;
             if (MinecraftClient.getInstance().options.keySprint.isPressed()) {
+                setSwimming(isSubmergedInWater);
                 vec = applyRunMultiplier(vec, FlyModConfigManager.getConfig().runSpeedMultiplier);
                 setSprinting(false);
             }
