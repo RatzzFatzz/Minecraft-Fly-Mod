@@ -1,6 +1,6 @@
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '0.5.9'
+    id 'fabric-loom' version '0.7.1'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -11,7 +11,6 @@ version = '1.7'
 group = 'at.pcgf.flymod'
 
 repositories {
-    jcenter()
     mavenCentral()
     maven {
         name = 'Fabric'

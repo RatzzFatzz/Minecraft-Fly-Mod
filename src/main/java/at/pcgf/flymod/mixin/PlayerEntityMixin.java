@@ -61,6 +61,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         } else if (!abilities.flying) {
             Vec3d vec = vec3d;
             if (MinecraftClient.getInstance().options.keySprint.isPressed()) {
+                setSwimming(isSubmergedInWater);
                 vec = applyRunMultiplier(vec, FlyModConfigManager.getConfig().runSpeedMultiplier);
                 setSprinting(false);
             }
