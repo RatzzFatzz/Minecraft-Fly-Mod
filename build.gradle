@@ -7,7 +7,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = 'flymod'
-version = '1.7'
+version = '1.7.1'
 group = 'at.pcgf.flymod'
 
 repositories {
