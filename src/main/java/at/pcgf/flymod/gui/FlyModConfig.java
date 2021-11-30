@@ -21,10 +21,15 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.TranslatableText;
 
+import java.io.ObjectInputFilter;
+
 public class FlyModConfig {
 
     @Expose
     public boolean mouseControl = true;
+
+    @Expose
+    public boolean onlyForCreative = false;
 
     @Expose
     public float flyUpDownBlocks = 0.4f;
@@ -50,7 +55,8 @@ public class FlyModConfig {
                 .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_SPEED_MULTIPLIER, config.flySpeedMultiplier).setDefaultValue(3f).setSaveConsumer(b -> config.flySpeedMultiplier = b).build())
                 .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.RUN_SPEED_MULTIPLIER, config.runSpeedMultiplier).setDefaultValue(2f).setSaveConsumer(b -> config.runSpeedMultiplier = b).build())
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MULTIPLY_UP_DOWN1, config.multiplyUpDown).setDefaultValue(true).setSaveConsumer(b -> config.multiplyUpDown = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.FADE_MOVEMENT, config.fadeMovement).setDefaultValue(true).setSaveConsumer(b -> config.fadeMovement = b).build());
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.FADE_MOVEMENT, config.fadeMovement).setDefaultValue(true).setSaveConsumer(b -> config.fadeMovement = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.CREATIVE_ONLY, config.onlyForCreative).setDefaultValue(true).setSaveConsumer(b -> config.onlyForCreative = b).build());
         builder.setSavingRunnable((FlyModConfigManager::save));
         return builder.build();
     }
@@ -59,6 +65,7 @@ public class FlyModConfig {
         static final TranslatableText TITLE = createTranslatableText("text.%s.title");
         static final TranslatableText CATEGORY = createTranslatableText("text.%s.category.default");
         static final TranslatableText MOUSE_CONTROL = createTranslatableText("text.%s.option.mouseControl");
+        static final TranslatableText CREATIVE_ONLY = createTranslatableText("text.%s.option.creativeOnly");
         static final TranslatableText FLY_UP_DOWN_BLOCKS = createTranslatableText("text.%s.option.flyUpDownBlocks");
         static final TranslatableText FLY_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.flySpeedMultiplier");
         static final TranslatableText RUN_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.runSpeedMultiplier");

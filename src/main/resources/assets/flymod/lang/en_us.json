@@ -2,6 +2,7 @@
   "text.flymod.title": "Fly Mod Configuration",
   "text.flymod.category.default": "Main",
   "text.flymod.option.mouseControl": "Toggle mouse control",
+  "text.flymod.option.creativeOnly": "Use only in creative mode",
   "text.flymod.option.flyUpDownBlocks": "Amount of blocks to fly up or down per tick",
   "text.flymod.option.flySpeedMultiplier": "Fly speed multiplier",
   "text.flymod.option.runSpeedMultiplier": "Run speed multiplier",
