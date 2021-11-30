@@ -1,13 +1,13 @@
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '0.8.17'
+    id 'fabric-loom' version '0.10.62'
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = 'flymod'
-version = '1.7.1'
+version = '1.7.2'
 group = 'at.pcgf.flymod'
 
 repositories {

@@ -20,10 +20,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.tag.Tag;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
@@ -46,7 +42,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
     public void move(MovementType type, Vec3d vec3d) {
         toggleFlying();
 
-        if (getAbilities().flying) {
+        if (getAbilities().flying && isActiveForCurrentGamemode()) {
             boolean backwards = MinecraftClient.getInstance().options.keyBack.isPressed();
             boolean forwards = MinecraftClient.getInstance().options.keyForward.isPressed();
             boolean left = MinecraftClient.getInstance().options.keyLeft.isPressed();
@@ -61,7 +57,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
             setSprinting(false);
             super.move(type, vec);
 
-        } else if (!getAbilities().flying) {
+        } else if (!getAbilities().flying && isActiveForCurrentGamemode()) {
             Vec3d vec = vec3d;
             if (MinecraftClient.getInstance().options.keySprint.isPressed()) {
                 setSwimming(isSubmergedInWater);
@@ -75,6 +71,10 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
     }
 
     private void toggleFlying() {
+        if (!isActiveForCurrentGamemode()) {
+            return;
+        }
+
         if (flyingState == FLYING) {
             getAbilities().flying = true;
         } else if (flyingState == NEUTRAL) {
@@ -83,7 +83,12 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         } else if (flyingState == NOT_FLYING && getAbilities().flying) {
             flyingState = FLYING;
         }
+
         sendAbilitiesUpdate();
+    }
+
+    private boolean isActiveForCurrentGamemode() {
+        return !(FlyModConfigManager.getConfig().onlyForCreative && !getAbilities().creativeMode);
     }
 
     private Vec3d mouseControlMovement(Vec3d vec3d, boolean backwards, boolean forwards, boolean left, boolean right) {
