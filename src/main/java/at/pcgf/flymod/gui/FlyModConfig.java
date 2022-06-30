@@ -16,12 +16,13 @@ package at.pcgf.flymod.gui;
 
 import at.pcgf.flymod.FlyModImpl;
 import com.google.gson.annotations.Expose;
+import com.terraformersmc.modmenu.util.TranslationUtil;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.TranslatableText;
-
-import java.io.ObjectInputFilter;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 
 public class FlyModConfig {
 
@@ -66,19 +67,19 @@ public class FlyModConfig {
     }
 
     private static class ConfigTexts {
-        static final TranslatableText TITLE = createTranslatableText("text.%s.title");
-        static final TranslatableText CATEGORY = createTranslatableText("text.%s.category.default");
-        static final TranslatableText MOUSE_CONTROL = createTranslatableText("text.%s.option.mouseControl");
-        static final TranslatableText CREATIVE_ONLY = createTranslatableText("text.%s.option.creativeOnly");
-        static final TranslatableText FLY_UP_DOWN_BLOCKS = createTranslatableText("text.%s.option.flyUpDownBlocks");
-        static final TranslatableText FLY_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.flySpeedMultiplier");
-        static final TranslatableText RUN_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.runSpeedMultiplier");
-        static final TranslatableText MULTIPLY_UP_DOWN1 = createTranslatableText("text.%s.option.multiplyUpDown");
-        static final TranslatableText FADE_MOVEMENT = createTranslatableText("text.%s.option.fadeMovement");
-        static final TranslatableText OVERRIDE_EXHAUSTION = createTranslatableText("text.%s.option.overrideExhaustion");
+        static final Text TITLE = createTranslatableText("text.%s.title");
+        static final Text CATEGORY = createTranslatableText("text.%s.category.default");
+        static final Text MOUSE_CONTROL = createTranslatableText("text.%s.option.mouseControl");
+        static final Text CREATIVE_ONLY = createTranslatableText("text.%s.option.creativeOnly");
+        static final Text FLY_UP_DOWN_BLOCKS = createTranslatableText("text.%s.option.flyUpDownBlocks");
+        static final Text FLY_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.flySpeedMultiplier");
+        static final Text RUN_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.runSpeedMultiplier");
+        static final Text MULTIPLY_UP_DOWN1 = createTranslatableText("text.%s.option.multiplyUpDown");
+        static final Text FADE_MOVEMENT = createTranslatableText("text.%s.option.fadeMovement");
+        static final Text OVERRIDE_EXHAUSTION = createTranslatableText("text.%s.option.overrideExhaustion");
 
-        private static TranslatableText createTranslatableText(String translationReference) {
-            return new TranslatableText(String.format(translationReference, FlyModImpl.MOD_ID));
+        private static MutableText createTranslatableText(String translationReference) {
+            return MutableText.of(new TranslatableTextContent(String.format(translationReference, FlyModImpl.MOD_ID)));
         }
     }
 

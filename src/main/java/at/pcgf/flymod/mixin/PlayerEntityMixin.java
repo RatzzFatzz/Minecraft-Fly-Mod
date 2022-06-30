@@ -20,6 +20,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
@@ -34,8 +35,8 @@ import static at.pcgf.flymod.FlyingState.*;
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class PlayerEntityMixin extends PlayerEntity {
 
-    protected PlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile) {
-        super(world, blockPos, f, gameProfile);
+    protected PlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile, PlayerPublicKey playerPublicKey) {
+        super(world, blockPos, f, gameProfile, playerPublicKey);
     }
 
     @Override
@@ -60,7 +61,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
         } else if (!getAbilities().flying && isActiveForCurrentGamemode()) {
             Vec3d vec = vec3d;
-            if (client.options.sprintKey.isPressed() || client.options.sprintToggled) {
+            if (client.options.sprintKey.isPressed() || client.options.getSprintToggled().getValue()) {
                 if (!FlyModConfigManager.getConfig().overrideExhaustion) {
                     setSprinting(true);
                     // -0.3 to account for the boost by setSprinting(true)
@@ -170,11 +171,5 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     private Vec3d applyRunMultiplier(Vec3d vec, float multiplier) {
         return new Vec3d(vec.getX() * multiplier, vec.getY(), vec.getZ() * multiplier);
-    }
-
-    private boolean isDefaultExhaustion() {
-        return !FlyModConfigManager.getConfig().overrideExhaustion
-                && MinecraftClient.getInstance().options.sprintKey.isPressed()
-                || MinecraftClient.getInstance().options.sprintToggled;
     }
 }
