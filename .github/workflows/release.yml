@@ -1,0 +1,33 @@
+# This workflow will run every time a new release is created.
+
+name: Build and release
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup workspace
+        run: mkdir artifacts
+
+      - name: Build with Gradle
+        run: |
+          gradle clean build
+          cp build/libs/!(flymod*-sources.jar) artifacts/
+      - name: Upload artifacts
+        uses: skx/github-action-publish-binaries@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: 'artifacts/*'

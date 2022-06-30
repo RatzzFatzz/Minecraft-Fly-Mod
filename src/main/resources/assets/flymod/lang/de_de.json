@@ -8,6 +8,7 @@
   "text.flymod.option.runSpeedMultiplier": "Renngeschwindigkeitsmultiplikator",
   "text.flymod.option.multiplyUpDown": "Hoch- / runterfliegen mit Sprinttaste erhöhen (Um Faktor des Flugmultiplikators)",
   "text.flymod.option.fadeMovement": "Bewegungen beim Fliegen langsam verringern (Funktioniert nur wenn Maussteuerung deaktiviert ist)",
+  "text.flymod.option.overrideExhaustion": "Überschreibe Hunger (kein erhöhten Hunger beim Sprinten)",
   "key.flymod.keybinding": "Fly Mod",
   "key.flymod.toggle": "FlyMod umschalten"
 }

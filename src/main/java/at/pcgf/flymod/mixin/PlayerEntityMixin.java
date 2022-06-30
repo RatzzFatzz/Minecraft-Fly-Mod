@@ -40,13 +40,14 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     @Override
     public void move(MovementType type, Vec3d vec3d) {
+        MinecraftClient client = MinecraftClient.getInstance();
         toggleFlying();
 
         if (getAbilities().flying && isActiveForCurrentGamemode()) {
-            boolean backwards = MinecraftClient.getInstance().options.keyBack.isPressed();
-            boolean forwards = MinecraftClient.getInstance().options.keyForward.isPressed();
-            boolean left = MinecraftClient.getInstance().options.keyLeft.isPressed();
-            boolean right = MinecraftClient.getInstance().options.keyRight.isPressed();
+            boolean backwards = client.options.backKey.isPressed();
+            boolean forwards = client.options.forwardKey.isPressed();
+            boolean left = client.options.leftKey.isPressed();
+            boolean right = client.options.rightKey.isPressed();
 
             Vec3d vec = mouseControlMovement(vec3d, backwards, forwards, left, right);
             fadeMovement(backwards || forwards || left || right);
@@ -59,10 +60,16 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
         } else if (!getAbilities().flying && isActiveForCurrentGamemode()) {
             Vec3d vec = vec3d;
-            if (MinecraftClient.getInstance().options.keySprint.isPressed()) {
+            if (client.options.sprintKey.isPressed() || client.options.sprintToggled) {
+                if (!FlyModConfigManager.getConfig().overrideExhaustion) {
+                    setSprinting(true);
+                    // -0.3 to account for the boost by setSprinting(true)
+                    vec = applyRunMultiplier(vec, FlyModConfigManager.getConfig().runSpeedMultiplier - 0.3F);
+                } else {
+                    setSprinting(false);
+                    vec = applyRunMultiplier(vec, FlyModConfigManager.getConfig().runSpeedMultiplier);
+                }
                 setSwimming(isSubmergedInWater);
-                vec = applyRunMultiplier(vec, FlyModConfigManager.getConfig().runSpeedMultiplier);
-                setSprinting(false);
             }
             super.move(type, vec);
         } else {
@@ -139,16 +146,16 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
     private Vec3d verticalMovement(Vec3d vec3d) {
         double y = vec3d.getY();
         double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
-        if (MinecraftClient.getInstance().options.keySneak.isPressed()) {
+        if (MinecraftClient.getInstance().options.sneakKey.isPressed()) {
             y -= flyUpDownBlocks;
-        } else if (MinecraftClient.getInstance().options.keyJump.isPressed()) {
+        } else if (MinecraftClient.getInstance().options.jumpKey.isPressed()) {
             y += flyUpDownBlocks;
         }
         return new Vec3d(vec3d.getX(), y, vec3d.getZ());
     }
 
     private Vec3d applyFlyMultiplier(double x, double y, double z) {
-        boolean speedEnabled = MinecraftClient.getInstance().options.keySprint.isPressed();
+        boolean speedEnabled = MinecraftClient.getInstance().options.sprintKey.isPressed();
         float multiplier = speedEnabled ? FlyModConfigManager.getConfig().flySpeedMultiplier : 1.0f;
         float upDownMultiplier = FlyModConfigManager.getConfig().multiplyUpDown && speedEnabled ? multiplier : 1.0f;
         x *= multiplier;
@@ -163,5 +170,11 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     private Vec3d applyRunMultiplier(Vec3d vec, float multiplier) {
         return new Vec3d(vec.getX() * multiplier, vec.getY(), vec.getZ() * multiplier);
+    }
+
+    private boolean isDefaultExhaustion() {
+        return !FlyModConfigManager.getConfig().overrideExhaustion
+                && MinecraftClient.getInstance().options.sprintKey.isPressed()
+                || MinecraftClient.getInstance().options.sprintToggled;
     }
 }
