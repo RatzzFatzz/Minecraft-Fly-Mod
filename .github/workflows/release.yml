@@ -24,7 +24,8 @@ jobs:
       - name: Build with Gradle
         run: |
           gradle clean build
-          cp build/libs/!(flymod*-sources.jar) artifacts/
+          rm build/libs/flymod*-sources.jar
+          cp build/libs/flymod*.jar artifacts/
       - name: Upload artifacts
         uses: skx/github-action-publish-binaries@master
         env:
