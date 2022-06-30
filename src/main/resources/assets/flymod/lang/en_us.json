@@ -8,6 +8,7 @@
   "text.flymod.option.runSpeedMultiplier": "Run speed multiplier",
   "text.flymod.option.multiplyUpDown": "Speed up flying down and up (by fly speed multiplier)",
   "text.flymod.option.fadeMovement": "Toggle default movement fading when flying (Only works if mouse control is disabled)",
+  "text.flymod.option.overrideExhaustion": "Override exhaustion (no exhaustion through sprinting)",
   "key.flymod.keybinding": "Fly Mod",
   "key.flymod.toggle": "Toggle fly mod"
 }

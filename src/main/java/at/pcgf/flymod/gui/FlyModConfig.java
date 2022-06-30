@@ -46,17 +46,21 @@ public class FlyModConfig {
     @Expose
     public boolean fadeMovement = false;
 
+    @Expose
+    public boolean overrideExhaustion = true;
+
     static Screen createConfigScreen(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(ConfigTexts.TITLE);
         FlyModConfig config = FlyModConfigManager.getConfig();
         builder.getOrCreateCategory(ConfigTexts.CATEGORY)
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MOUSE_CONTROL, config.mouseControl).setDefaultValue(true).setSaveConsumer(b -> config.mouseControl = b).build())
                 .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_UP_DOWN_BLOCKS, config.flyUpDownBlocks).setDefaultValue(0.4f).setSaveConsumer(b -> config.flyUpDownBlocks = b).build())
-                .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_SPEED_MULTIPLIER, config.flySpeedMultiplier).setDefaultValue(3f).setSaveConsumer(b -> config.flySpeedMultiplier = b).build())
-                .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.RUN_SPEED_MULTIPLIER, config.runSpeedMultiplier).setDefaultValue(2f).setSaveConsumer(b -> config.runSpeedMultiplier = b).build())
+                .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_SPEED_MULTIPLIER, config.flySpeedMultiplier).setDefaultValue(2f).setSaveConsumer(b -> config.flySpeedMultiplier = b).build())
+                .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.RUN_SPEED_MULTIPLIER, config.runSpeedMultiplier).setDefaultValue(1.3f).setSaveConsumer(b -> config.runSpeedMultiplier = b).build())
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MULTIPLY_UP_DOWN1, config.multiplyUpDown).setDefaultValue(true).setSaveConsumer(b -> config.multiplyUpDown = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.FADE_MOVEMENT, config.fadeMovement).setDefaultValue(true).setSaveConsumer(b -> config.fadeMovement = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.CREATIVE_ONLY, config.onlyForCreative).setDefaultValue(true).setSaveConsumer(b -> config.onlyForCreative = b).build());
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.FADE_MOVEMENT, config.fadeMovement).setDefaultValue(false).setSaveConsumer(b -> config.fadeMovement = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.CREATIVE_ONLY, config.onlyForCreative).setDefaultValue(false).setSaveConsumer(b -> config.onlyForCreative = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.OVERRIDE_EXHAUSTION, config.overrideExhaustion).setDefaultValue(true).setSaveConsumer(b -> config.overrideExhaustion = b).build());
         builder.setSavingRunnable((FlyModConfigManager::save));
         return builder.build();
     }
@@ -71,6 +75,7 @@ public class FlyModConfig {
         static final TranslatableText RUN_SPEED_MULTIPLIER = createTranslatableText("text.%s.option.runSpeedMultiplier");
         static final TranslatableText MULTIPLY_UP_DOWN1 = createTranslatableText("text.%s.option.multiplyUpDown");
         static final TranslatableText FADE_MOVEMENT = createTranslatableText("text.%s.option.fadeMovement");
+        static final TranslatableText OVERRIDE_EXHAUSTION = createTranslatableText("text.%s.option.overrideExhaustion");
 
         private static TranslatableText createTranslatableText(String translationReference) {
             return new TranslatableText(String.format(translationReference, FlyModImpl.MOD_ID));
