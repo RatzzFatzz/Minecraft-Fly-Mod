@@ -8,6 +8,7 @@ This Mod for Minecraft allows you to enable a 3D fly and let you customize the f
     * 1.16.1 - 1.16.5
     * 1.17 - 1.17.1
     * 1.18.2
+    * 1.19
 * Fabric
 * ModMenu
 * Java 8 (Java 16 for Minecraft 1.17 and later)

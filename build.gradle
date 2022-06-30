@@ -1,6 +1,6 @@
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '0.12.9'
+    id 'fabric-loom' version '0.12.51'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -19,14 +19,14 @@ repositories {
 }
 
 ext {
-    minecraft_version = '1.18.2'
+    minecraft_version = '1.19'
 
-    yarn_mappings = '1.18.2+build.3'
+    yarn_mappings = '1.19+build.4'
     loader_version = '0.14.8'
-    fabric_version = '0.57.0+1.18.2'
+    fabric_version = '0.57.0+1.19'
 
-    cloth_config_version = '6.2.62'
-    mod_menu_version = '3.2.3'
+    cloth_config_version = '7.0.72'
+    mod_menu_version = '4.0.0'
 }
 
 dependencies {
@@ -35,7 +35,6 @@ dependencies {
     )
 
     mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-
 
     modImplementation(
             [group: 'net.fabricmc', name: 'fabric-loader', version: "${loader_version}"],
@@ -61,7 +60,7 @@ tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
 
     // Minecraft 1.17 (21w19a) upwards uses Java 16.
-    it.options.release = 16
+    it.options.release = 17
 }
 
 java {
