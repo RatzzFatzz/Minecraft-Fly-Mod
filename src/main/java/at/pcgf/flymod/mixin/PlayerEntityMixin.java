@@ -147,7 +147,9 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
     private Vec3d verticalMovement(Vec3d vec3d) {
         double y = vec3d.getY();
         double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
-        if (MinecraftClient.getInstance().options.sneakKey.isPressed()) {
+        if (MinecraftClient.getInstance().options.sneakKey.isPressed() && MinecraftClient.getInstance().options.jumpKey.isPressed()) {
+            y += 0;
+        } else if (MinecraftClient.getInstance().options.sneakKey.isPressed()) {
             y -= flyUpDownBlocks;
         } else if (MinecraftClient.getInstance().options.jumpKey.isPressed()) {
             y += flyUpDownBlocks;
