@@ -1,13 +1,25 @@
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '0.12.51'
+    id 'fabric-loom' version '0.13.9'
+}
+
+ext {
+    mod_version = '1.8.1'
+    minecraft_version = '1.20'
+
+    yarn_mappings = '1.20+build.1'
+    loader_version = '0.14.9'
+    fabric_version = '0.83.0+1.20'
+
+    cloth_config_version = '11.0.98'
+    mod_menu_version = '7.0.1'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = 'flymod'
-version = '1.8'
+version = "${mod_version}-${minecraft_version}"
 group = 'at.pcgf.flymod'
 
 repositories {
@@ -16,17 +28,6 @@ repositories {
     maven { url 'https://minecraft.curseforge.com/api/maven' }
     maven { url 'https://maven.shedaniel.me/' }
     maven { url 'https://maven.terraformersmc.com/releases'}
-}
-
-ext {
-    minecraft_version = '1.19'
-
-    yarn_mappings = '1.19+build.4'
-    loader_version = '0.14.8'
-    fabric_version = '0.57.0+1.19'
-
-    cloth_config_version = '7.0.72'
-    mod_menu_version = '4.0.0'
 }
 
 dependencies {

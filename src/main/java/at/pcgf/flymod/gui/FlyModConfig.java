@@ -16,7 +16,6 @@ package at.pcgf.flymod.gui;
 
 import at.pcgf.flymod.FlyModImpl;
 import com.google.gson.annotations.Expose;
-import com.terraformersmc.modmenu.util.TranslationUtil;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screen.Screen;
@@ -79,7 +78,7 @@ public class FlyModConfig {
         static final Text OVERRIDE_EXHAUSTION = createTranslatableText("text.%s.option.overrideExhaustion");
 
         private static MutableText createTranslatableText(String translationReference) {
-            return MutableText.of(new TranslatableTextContent(String.format(translationReference, FlyModImpl.MOD_ID)));
+            return MutableText.of(new TranslatableTextContent(String.format(translationReference, FlyModImpl.MOD_ID), "", new String[]{}));
         }
     }
 

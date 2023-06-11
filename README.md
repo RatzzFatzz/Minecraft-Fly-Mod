@@ -9,13 +9,20 @@ This Mod for Minecraft allows you to enable a 3D fly and let you customize the f
     * 1.17 - 1.17.1
     * 1.18.2
     * 1.19
+    * 1.20
 * Fabric
-* ModMenu
-* Java 8 (Java 16 for Minecraft 1.17 and later)
+* (Recommended) Mod Menu
+* Cloth Config
+* Java 8 (up to Minecraft 1.16)
+* Java 16 (for Minecraft 1.17)
+* Java 17 (for Minecraft 1.18 and later)
 
 ## Supported languages
-* Deutsch
+* Deutsch / German
 * English
 
 ## External links
-You can also have a look at the description at [curseforge](https://www.curseforge.com/minecraft/mc-mods/fly-mod-3d "Show the Mod on curseforge").
+This mod is also available on:
+- [Curseforge](https://www.curseforge.com/minecraft/mc-mods/fly-mod-3d)
+- [Modrinth](https://modrinth.com/mod/fly-mod-3d)
+

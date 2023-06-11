@@ -20,23 +20,26 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vector4f;
 import net.minecraft.world.World;
+import org.joml.*;
 import org.spongepowered.asm.mixin.Mixin;
+
+import java.lang.Math;
 
 import static at.pcgf.flymod.FlyModImpl.flyingState;
 import static at.pcgf.flymod.FlyingState.*;
+import static org.joml.Math.cos;
+import static org.joml.Math.sin;
 
 @SuppressWarnings("unused")
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class PlayerEntityMixin extends PlayerEntity {
 
-    protected PlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile, PlayerPublicKey playerPublicKey) {
-        super(world, blockPos, f, gameProfile, playerPublicKey);
+
+    public PlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
+        super(world, pos, yaw, gameProfile);
     }
 
     @Override
@@ -111,12 +114,13 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
             directionsVector.normalize();
             float length = (float) Math.sqrt((vec3d.getX() * vec3d.getX()) + (vec3d.getZ() * vec3d.getZ()));
             Vector4f movementVector = multiply4dVector(directionsVector, length);
-            // roll yaw pitch degree
-            movementVector.rotate(new Quaternion(0, -(yaw - 90), pitch, true));
 
-            float resultX = movementVector.getX() / movementVector.getW();
-            float resultY = movementVector.getY() / movementVector.getW();
-            float resultZ = movementVector.getZ() / movementVector.getW();
+            // roll yaw pitch degree
+            movementVector.rotate(quaternionOf(0, -(yaw - 90), pitch));
+
+            float resultX = movementVector.x() / movementVector.w();
+            float resultY = movementVector.y() / movementVector.w();
+            float resultZ = movementVector.z() / movementVector.w();
             return new Vec3d(
                     Double.isNaN(resultX) ? 0 : resultX,
                     Double.isNaN(resultY) ? 0 : resultY,
@@ -128,11 +132,32 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     private Vector4f multiply4dVector(Vector4f vector, float length) {
         return new Vector4f(
-                vector.getX() * length,
-                vector.getY() * length,
-                vector.getZ() * length,
-                vector.getW() * length
+                vector.x() * length,
+                vector.y() * length,
+                vector.z() * length,
+                vector.w() * length
         );
+    }
+
+    /**
+     * This is basically the implementation of the minecraft math constructor of Quaternion.
+     * Quaternions were moved in 1.20 and do no longer of this directly.
+     */
+    private Quaternionf quaternionOf(float x, float y, float z) {
+        x *= 0.017453292F;
+        y *= 0.017453292F;
+        z *= 0.017453292F;
+
+        float f = sin(0.5F * x);
+        float g = cos(0.5F * x);
+        float h = sin(0.5F * y);
+        float i = cos(0.5F * y);
+        float j = sin(0.5F * z);
+        float k = cos(0.5F * z);
+        return new Quaternionf(f * i * k + g * h * j,
+                g * h * k - f * i * j,
+                f * h * k + g * i * j,
+                g * i * k - f * h * j);
     }
 
     private void fadeMovement(boolean isMoving) {
