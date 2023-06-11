@@ -15,7 +15,6 @@
 package at.pcgf.flymod.mixin;
 
 import at.pcgf.flymod.gui.FlyModConfigManager;
-import com.google.common.math.Quantiles;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -31,6 +30,8 @@ import java.lang.Math;
 
 import static at.pcgf.flymod.FlyModImpl.flyingState;
 import static at.pcgf.flymod.FlyingState.*;
+import static org.joml.Math.cos;
+import static org.joml.Math.sin;
 
 @SuppressWarnings("unused")
 @Mixin(AbstractClientPlayerEntity.class)
@@ -115,7 +116,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
             Vector4f movementVector = multiply4dVector(directionsVector, length);
 
             // roll yaw pitch degree
-            movementVector.rotate(new Quaternionf(0, -(yaw - 90), pitch, 0));
+            movementVector.rotate(quaternionOf(0, -(yaw - 90), pitch));
 
             float resultX = movementVector.x() / movementVector.w();
             float resultY = movementVector.y() / movementVector.w();
@@ -136,6 +137,27 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
                 vector.z() * length,
                 vector.w() * length
         );
+    }
+
+    /**
+     * This is basically the implementation of the minecraft math constructor of Quaternion.
+     * Quaternions were moved in 1.20 and do no longer of this directly.
+     */
+    private Quaternionf quaternionOf(float x, float y, float z) {
+        x *= 0.017453292F;
+        y *= 0.017453292F;
+        z *= 0.017453292F;
+
+        float f = sin(0.5F * x);
+        float g = cos(0.5F * x);
+        float h = sin(0.5F * y);
+        float i = cos(0.5F * y);
+        float j = sin(0.5F * z);
+        float k = cos(0.5F * z);
+        return new Quaternionf(f * i * k + g * h * j,
+                g * h * k - f * i * j,
+                f * h * k + g * i * j,
+                g * i * k - f * h * j);
     }
 
     private void fadeMovement(boolean isMoving) {
