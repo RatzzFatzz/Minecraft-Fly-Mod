@@ -102,18 +102,18 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         return !(FlyModConfigManager.getConfig().onlyForCreative && !getAbilities().creativeMode);
     }
 
-    private Vec3d mouseControlMovement(Vec3d vec3d, boolean backwards, boolean forwards, boolean left, boolean right) {
+    private Vec3d mouseControlMovement(final Vec3d vec3d, boolean backwards, boolean forwards, boolean left, boolean right) {
         if (FlyModConfigManager.getConfig().mouseControl) {
             float pitch = prevPitch;
             float yaw = prevYaw;
-            Vector4f directionsVector = new Vector4f(
+            final Vector4f directionsVector = new Vector4f(
                     (backwards ? 1 : 0) - (forwards ? 1 : 0),
                     0,
                     (left ? 1 : 0) - (right ? 1 : 0),
                     1);
             directionsVector.normalize();
             float length = (float) Math.sqrt((vec3d.getX() * vec3d.getX()) + (vec3d.getZ() * vec3d.getZ()));
-            Vector4f movementVector = multiply4dVector(directionsVector, length);
+            final Vector4f movementVector = multiply4dVector(directionsVector, length);
 
             // roll yaw pitch degree
             movementVector.rotate(quaternionOf(0, -(yaw - 90), pitch));
@@ -130,7 +130,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         return vec3d;
     }
 
-    private Vector4f multiply4dVector(Vector4f vector, float length) {
+    private Vector4f multiply4dVector(final Vector4f vector, float length) {
         return new Vector4f(
                 vector.x() * length,
                 vector.y() * length,
@@ -141,19 +141,19 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     /**
      * This is basically the implementation of the minecraft math constructor of Quaternion.
-     * Quaternions were moved in 1.20 and do no longer of this directly.
+     * Quaternions were moved in 1.20 and do no longer offer this directly.
      */
     private Quaternionf quaternionOf(float x, float y, float z) {
-        x *= 0.017453292F;
-        y *= 0.017453292F;
-        z *= 0.017453292F;
+        x *= 0.017453292F * 0.5F;
+        y *= 0.017453292F * 0.5F;
+        z *= 0.017453292F * 0.5F;
 
-        float f = sin(0.5F * x);
-        float g = cos(0.5F * x);
-        float h = sin(0.5F * y);
-        float i = cos(0.5F * y);
-        float j = sin(0.5F * z);
-        float k = cos(0.5F * z);
+        float f = sin(x);
+        float g = cos(x);
+        float h = sin(y);
+        float i = cos(y);
+        float j = sin(z);
+        float k = cos(z);
         return new Quaternionf(f * i * k + g * h * j,
                 g * h * k - f * i * j,
                 f * h * k + g * i * j,
@@ -169,7 +169,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         }
     }
 
-    private Vec3d verticalMovement(Vec3d vec3d) {
+    private Vec3d verticalMovement(final Vec3d vec3d) {
         double y = vec3d.getY();
         double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
         if (MinecraftClient.getInstance().options.sneakKey.isPressed() && MinecraftClient.getInstance().options.jumpKey.isPressed()) {
@@ -192,11 +192,11 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         return new Vec3d(x, y, z);
     }
 
-    private Vec3d applyFlyMultiplier(Vec3d vec3d) {
+    private Vec3d applyFlyMultiplier(final Vec3d vec3d) {
         return applyFlyMultiplier(vec3d.getX(), vec3d.getY(), vec3d.getZ());
     }
 
-    private Vec3d applyRunMultiplier(Vec3d vec, float multiplier) {
+    private Vec3d applyRunMultiplier(final Vec3d vec, float multiplier) {
         return new Vec3d(vec.getX() * multiplier, vec.getY(), vec.getZ() * multiplier);
     }
 }

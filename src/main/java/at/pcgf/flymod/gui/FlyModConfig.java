@@ -23,49 +23,52 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 
+import static at.pcgf.flymod.gui.FlyModConfig.ConfigTexts.*;
+
 public class FlyModConfig {
 
     @Expose
-    public boolean mouseControl = true;
+    public boolean mouseControl;
 
     @Expose
-    public boolean onlyForCreative = false;
+    public boolean onlyForCreative;
 
     @Expose
-    public float flyUpDownBlocks = 0.4f;
+    public float flyUpDownBlocks;
 
     @Expose
-    public float flySpeedMultiplier = 3;
+    public float flySpeedMultiplier;
 
     @Expose
-    public float runSpeedMultiplier = 1.5F;
+    public float runSpeedMultiplier;
 
     @Expose
-    public boolean multiplyUpDown = true;
+    public boolean multiplyUpDown;
 
     @Expose
-    public boolean fadeMovement = false;
+    public boolean fadeMovement;
 
     @Expose
-    public boolean overrideExhaustion = true;
+    public boolean overrideExhaustion;
 
     static Screen createConfigScreen(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(ConfigTexts.TITLE);
         FlyModConfig config = FlyModConfigManager.getConfig();
+
         builder.getOrCreateCategory(ConfigTexts.CATEGORY)
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MOUSE_CONTROL, config.mouseControl).setDefaultValue(true).setSaveConsumer(b -> config.mouseControl = b).build())
-                .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_UP_DOWN_BLOCKS, config.flyUpDownBlocks).setDefaultValue(0.4f).setSaveConsumer(b -> config.flyUpDownBlocks = b).build())
-                .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.FLY_SPEED_MULTIPLIER, config.flySpeedMultiplier).setDefaultValue(2f).setSaveConsumer(b -> config.flySpeedMultiplier = b).build())
-                .addEntry(ConfigEntryBuilder.create().startFloatField(ConfigTexts.RUN_SPEED_MULTIPLIER, config.runSpeedMultiplier).setDefaultValue(1.3f).setSaveConsumer(b -> config.runSpeedMultiplier = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.MULTIPLY_UP_DOWN1, config.multiplyUpDown).setDefaultValue(true).setSaveConsumer(b -> config.multiplyUpDown = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.FADE_MOVEMENT, config.fadeMovement).setDefaultValue(false).setSaveConsumer(b -> config.fadeMovement = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.CREATIVE_ONLY, config.onlyForCreative).setDefaultValue(false).setSaveConsumer(b -> config.onlyForCreative = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ConfigTexts.OVERRIDE_EXHAUSTION, config.overrideExhaustion).setDefaultValue(true).setSaveConsumer(b -> config.overrideExhaustion = b).build());
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(MOUSE_CONTROL, config.mouseControl).setDefaultValue(true).setSaveConsumer(b -> config.mouseControl = b).build())
+                .addEntry(ConfigEntryBuilder.create().startFloatField(FLY_UP_DOWN_BLOCKS, config.flyUpDownBlocks).setDefaultValue(0.4f).setSaveConsumer(b -> config.flyUpDownBlocks = b).build())
+                .addEntry(ConfigEntryBuilder.create().startFloatField(FLY_SPEED_MULTIPLIER, config.flySpeedMultiplier).setDefaultValue(2f).setSaveConsumer(b -> config.flySpeedMultiplier = b).build())
+                .addEntry(ConfigEntryBuilder.create().startFloatField(RUN_SPEED_MULTIPLIER, config.runSpeedMultiplier).setDefaultValue(1.3f).setSaveConsumer(b -> config.runSpeedMultiplier = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(MULTIPLY_UP_DOWN1, config.multiplyUpDown).setDefaultValue(true).setSaveConsumer(b -> config.multiplyUpDown = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(FADE_MOVEMENT, config.fadeMovement).setDefaultValue(false).setSaveConsumer(b -> config.fadeMovement = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(CREATIVE_ONLY, config.onlyForCreative).setDefaultValue(false).setSaveConsumer(b -> config.onlyForCreative = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(OVERRIDE_EXHAUSTION, config.overrideExhaustion).setDefaultValue(false).setSaveConsumer(b -> config.overrideExhaustion = b).build());
         builder.setSavingRunnable((FlyModConfigManager::save));
         return builder.build();
     }
 
-    private static class ConfigTexts {
+    static class ConfigTexts {
         static final Text TITLE = createTranslatableText("text.%s.title");
         static final Text CATEGORY = createTranslatableText("text.%s.category.default");
         static final Text MOUSE_CONTROL = createTranslatableText("text.%s.option.mouseControl");
