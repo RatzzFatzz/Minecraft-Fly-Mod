@@ -23,6 +23,8 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 
+import java.util.Set;
+
 import static at.pcgf.flymod.gui.FlyModConfig.ConfigTexts.*;
 
 public class FlyModConfig {
@@ -51,6 +53,15 @@ public class FlyModConfig {
     @Expose
     public boolean overrideExhaustion;
 
+    @Expose
+    public boolean activeInMultiplayer;
+
+    @Expose
+    public boolean activeInLocalMultiplayer;
+
+    @Expose
+    public boolean activeInSingleplayer;
+
     static Screen createConfigScreen(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(ConfigTexts.TITLE);
         FlyModConfig config = FlyModConfigManager.getConfig();
@@ -63,7 +74,10 @@ public class FlyModConfig {
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(MULTIPLY_UP_DOWN1, config.multiplyUpDown).setDefaultValue(true).setSaveConsumer(b -> config.multiplyUpDown = b).build())
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(FADE_MOVEMENT, config.fadeMovement).setDefaultValue(false).setSaveConsumer(b -> config.fadeMovement = b).build())
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(CREATIVE_ONLY, config.onlyForCreative).setDefaultValue(false).setSaveConsumer(b -> config.onlyForCreative = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(OVERRIDE_EXHAUSTION, config.overrideExhaustion).setDefaultValue(false).setSaveConsumer(b -> config.overrideExhaustion = b).build());
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(OVERRIDE_EXHAUSTION, config.overrideExhaustion).setDefaultValue(false).setSaveConsumer(b -> config.overrideExhaustion = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ACTIVE_IN_MULTIPLAYER, config.activeInMultiplayer).setDefaultValue(true).setSaveConsumer(b -> config.activeInMultiplayer = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ACTIVE_IN_LOCAL_MULTIPLAYER, config.activeInLocalMultiplayer).setDefaultValue(false).setSaveConsumer(b -> config.activeInLocalMultiplayer = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ACTIVE_IN_SINGLEPLAYER, config.activeInSingleplayer).setDefaultValue(false).setSaveConsumer(b -> config.activeInSingleplayer = b).build());
         builder.setSavingRunnable((FlyModConfigManager::save));
         return builder.build();
     }
@@ -79,6 +93,9 @@ public class FlyModConfig {
         static final Text MULTIPLY_UP_DOWN1 = createTranslatableText("text.%s.option.multiplyUpDown");
         static final Text FADE_MOVEMENT = createTranslatableText("text.%s.option.fadeMovement");
         static final Text OVERRIDE_EXHAUSTION = createTranslatableText("text.%s.option.overrideExhaustion");
+        static final Text ACTIVE_IN_MULTIPLAYER = createTranslatableText("text.%s.option.activeInMultiplayer");
+        static final Text ACTIVE_IN_LOCAL_MULTIPLAYER = createTranslatableText("text.%s.option.activeInLocalMultiplayer");
+        static final Text ACTIVE_IN_SINGLEPLAYER = createTranslatableText("text.%s.option.activeInSingleplayer");
 
         private static MutableText createTranslatableText(String translationReference) {
             return MutableText.of(new TranslatableTextContent(String.format(translationReference, FlyModImpl.MOD_ID), "", new String[]{}));

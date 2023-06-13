@@ -11,6 +11,10 @@
   "text.flymod.option.fadeMovement": "Bewegungen beim Fliegen langsam verringern (Funktioniert nur wenn Maussteuerung deaktiviert ist)",
   "text.flymod.option.overrideExhaustion": "Keine Erschöpfung durch Sprinten",
 
+  "text.flymod.option.activeInMultiplayer": "Aktiv in Multiplayer",
+  "text.flymod.option.activeInLocalMultiplayer": "Aktiv in lokalem Multiplayer",
+  "text.flymod.option.activeInSingleplayer": "Aktiv in Singleplayer",
+
   "key.flymod.keybinding": "Fly Mod",
   "key.flymod.toggle": "FlyMod umschalten",
 

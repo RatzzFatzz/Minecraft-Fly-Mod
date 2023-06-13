@@ -11,6 +11,10 @@
   "text.flymod.option.fadeMovement": "Default movement fading when flying (Only works if mouse control is disabled)",
   "text.flymod.option.overrideExhaustion": "No exhaustion when running",
 
+  "text.flymod.option.activeInMultiplayer": "Enabled in Multiplayer",
+  "text.flymod.option.activeInLocalMultiplayer": "Enabled in local Multiplayer",
+  "text.flymod.option.activeInSingleplayer": "Enabled in Singleplayer",
+
   "key.flymod.keybinding": "Fly Mod",
   "key.flymod.toggle": "Toggle Fly Mod",
 

@@ -47,7 +47,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         MinecraftClient client = MinecraftClient.getInstance();
         toggleFlying();
 
-        if (getAbilities().flying && isActiveForCurrentGamemode()) {
+        if (getAbilities().flying && isActiveForCurrentGamemode() && isActiveForCurrentServer()) {
             boolean backwards = client.options.backKey.isPressed();
             boolean forwards = client.options.forwardKey.isPressed();
             boolean left = client.options.leftKey.isPressed();
@@ -62,7 +62,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
             setSprinting(false);
             super.move(type, vec);
 
-        } else if (!getAbilities().flying && isActiveForCurrentGamemode()) {
+        } else if (!getAbilities().flying && isActiveForCurrentGamemode() && isActiveForCurrentServer()) {
             Vec3d vec = vec3d;
             if (client.options.sprintKey.isPressed() || client.options.getSprintToggled().getValue()) {
                 if (!FlyModConfigManager.getConfig().overrideExhaustion) {
@@ -82,7 +82,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
     }
 
     private void toggleFlying() {
-        if (!isActiveForCurrentGamemode()) {
+        if (!isActiveForCurrentGamemode() || !isActiveForCurrentServer()) {
             return;
         }
 
@@ -100,6 +100,13 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     private boolean isActiveForCurrentGamemode() {
         return !(FlyModConfigManager.getConfig().onlyForCreative && !getAbilities().creativeMode);
+    }
+
+    private boolean isActiveForCurrentServer() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        return (client.getServer() != null && client.getServer().isSingleplayer() && FlyModConfigManager.getConfig().activeInSingleplayer)
+                || (client.getServer() != null && client.getServer().isRemote() && FlyModConfigManager.getConfig().activeInMultiplayer)
+                || (client.getCurrentServerEntry() != null && client.getCurrentServerEntry().isLocal() && FlyModConfigManager.getConfig().activeInLocalMultiplayer);
     }
 
     private Vec3d mouseControlMovement(final Vec3d vec3d, boolean backwards, boolean forwards, boolean left, boolean right) {
