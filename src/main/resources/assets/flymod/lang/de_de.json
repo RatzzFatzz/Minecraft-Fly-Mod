@@ -1,9 +1,8 @@
 {
   "text.flymod.title": "Fly Mod Einstellungen",
-  "text.flymod.category.default": "Allgemein",
 
+  "text.flymod.category.modifiers": "Steuerung",
   "text.flymod.option.mouseControl": "Maussteuerung aktivirien",
-  "text.flymod.option.creativeOnly": "Nur im Kreativ-Modus verwenden",
   "text.flymod.option.flyUpDownBlocks": "Blöcke die pro Tick hoch- / runtergeflogen wird",
   "text.flymod.option.flySpeedMultiplier": "Fluggeschwindigkeitsmultiplikator",
   "text.flymod.option.runSpeedMultiplier": "Sprintgeschwindigkeitsmultiplikator",
@@ -11,6 +10,8 @@
   "text.flymod.option.fadeMovement": "Bewegungen beim Fliegen langsam verringern (Funktioniert nur wenn Maussteuerung deaktiviert ist)",
   "text.flymod.option.overrideExhaustion": "Keine Erschöpfung durch Sprinten",
 
+  "text.flymod.category.runtime": "Verwendung",
+  "text.flymod.option.creativeOnly": "Nur im Kreativ-Modus verwenden",
   "text.flymod.option.activeInMultiplayer": "Aktiv in Multiplayer",
   "text.flymod.option.activeInLocalMultiplayer": "Aktiv in lokalem Multiplayer",
   "text.flymod.option.activeInSingleplayer": "Aktiv in Singleplayer",

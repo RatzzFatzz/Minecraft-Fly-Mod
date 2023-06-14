@@ -1,9 +1,8 @@
 {
   "text.flymod.title": "Fly Mod Configuration",
-  "text.flymod.category.default": "Main",
 
+  "text.flymod.category.modifiers": "Modifiers",
   "text.flymod.option.mouseControl": "Enable mouse control",
-  "text.flymod.option.creativeOnly": "Use only in creative mode",
   "text.flymod.option.flyUpDownBlocks": "Blocks to fly up or down per tick",
   "text.flymod.option.flySpeedMultiplier": "Fly speed multiplier",
   "text.flymod.option.runSpeedMultiplier": "Run speed multiplier",
@@ -11,6 +10,8 @@
   "text.flymod.option.fadeMovement": "Default movement fading when flying (Only works if mouse control is disabled)",
   "text.flymod.option.overrideExhaustion": "No exhaustion when running",
 
+  "text.flymod.category.runtime": "Runtime",
+  "text.flymod.option.creativeOnly": "Use only in creative mode",
   "text.flymod.option.activeInMultiplayer": "Enabled in Multiplayer",
   "text.flymod.option.activeInLocalMultiplayer": "Enabled in local Multiplayer",
   "text.flymod.option.activeInSingleplayer": "Enabled in Singleplayer",
