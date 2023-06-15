@@ -13,7 +13,6 @@
   "text.flymod.category.runtime": "Runtime",
   "text.flymod.option.creativeOnly": "Use only in creative mode",
   "text.flymod.option.activeInMultiplayer": "Enabled in Multiplayer",
-  "text.flymod.option.activeInLocalMultiplayer": "Enabled in local Multiplayer",
   "text.flymod.option.activeInSingleplayer": "Enabled in Singleplayer",
 
   "key.flymod.keybinding": "Fly Mod",

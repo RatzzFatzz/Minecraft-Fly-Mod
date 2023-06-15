@@ -55,9 +55,6 @@ public class FlyModConfig {
     public boolean activeInMultiplayer;
 
     @Expose
-    public boolean activeInLocalMultiplayer;
-
-    @Expose
     public boolean activeInSingleplayer;
 
     static Screen createConfigScreen(Screen parent) {
@@ -76,7 +73,6 @@ public class FlyModConfig {
         builder.getOrCreateCategory(ConfigTexts.RUNTIME)
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(CREATIVE_ONLY, config.onlyForCreative).setDefaultValue(false).setSaveConsumer(b -> config.onlyForCreative = b).build())
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ACTIVE_IN_MULTIPLAYER, config.activeInMultiplayer).setDefaultValue(false).setSaveConsumer(b -> config.activeInMultiplayer = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ACTIVE_IN_LOCAL_MULTIPLAYER, config.activeInLocalMultiplayer).setDefaultValue(true).setSaveConsumer(b -> config.activeInLocalMultiplayer = b).build())
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ACTIVE_IN_SINGLEPLAYER, config.activeInSingleplayer).setDefaultValue(true).setSaveConsumer(b -> config.activeInSingleplayer = b).build());
 
         builder.setSavingRunnable((FlyModConfigManager::save));
@@ -98,7 +94,6 @@ public class FlyModConfig {
         static final Text RUNTIME = createTranslatableText("text.%s.category.runtime");
         static final Text CREATIVE_ONLY = createTranslatableText("text.%s.option.creativeOnly");
         static final Text ACTIVE_IN_MULTIPLAYER = createTranslatableText("text.%s.option.activeInMultiplayer");
-        static final Text ACTIVE_IN_LOCAL_MULTIPLAYER = createTranslatableText("text.%s.option.activeInLocalMultiplayer");
         static final Text ACTIVE_IN_SINGLEPLAYER = createTranslatableText("text.%s.option.activeInSingleplayer");
 
         private static MutableText createTranslatableText(String translationReference) {

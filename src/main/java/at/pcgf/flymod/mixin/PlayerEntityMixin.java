@@ -18,6 +18,7 @@ import at.pcgf.flymod.gui.FlyModConfigManager;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +37,6 @@ import static org.joml.Math.sin;
 @SuppressWarnings("unused")
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class PlayerEntityMixin extends PlayerEntity {
-
 
     public PlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
@@ -105,8 +105,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
     private boolean isActiveForCurrentServer() {
         MinecraftClient client = MinecraftClient.getInstance();
         return (client.getServer() != null && client.getServer().isSingleplayer() && FlyModConfigManager.getConfig().activeInSingleplayer)
-                || (client.getServer() != null && client.getServer().isRemote() && FlyModConfigManager.getConfig().activeInMultiplayer)
-                || (client.getCurrentServerEntry() != null && client.getCurrentServerEntry().isLocal() && FlyModConfigManager.getConfig().activeInLocalMultiplayer);
+                || (client.getNetworkHandler() != null && FlyModConfigManager.getConfig().activeInMultiplayer);
     }
 
     private Vec3d mouseControlMovement(final Vec3d vec3d, boolean backwards, boolean forwards, boolean left, boolean right) {
