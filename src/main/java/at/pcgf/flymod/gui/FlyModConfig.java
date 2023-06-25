@@ -57,6 +57,10 @@ public class FlyModConfig {
     @Expose
     public boolean activeInSingleplayer;
 
+    // Wait for server message to allow mod activation in multiplayer
+    public boolean isFlyingAllowedInMultiplayer;
+    public boolean isSpeedModifierAllowedInMultiplayer;
+
     static Screen createConfigScreen(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(ConfigTexts.TITLE);
         FlyModConfig config = FlyModConfigManager.getConfig();
