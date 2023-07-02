@@ -18,16 +18,14 @@ import at.pcgf.flymod.gui.FlyModConfigManager;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.joml.*;
+import org.joml.Quaternionf;
+import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
-
-import java.lang.Math;
 
 import static at.pcgf.flymod.FlyModImpl.flyingState;
 import static at.pcgf.flymod.FlyingState.*;
