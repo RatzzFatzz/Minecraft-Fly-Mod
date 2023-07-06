@@ -59,13 +59,13 @@ public class FlyModImpl implements ClientModInitializer {
         System.out.println("Registered event resetting permissions after server disconnect.");
 
         // Communicate if the player is allowed to use speed modifiers
-        ClientPlayNetworking.registerGlobalReceiver(FLY_MOD_PERMISSIONS_IDENTIFIER, (client, handler, buf, responseSender) -> {
-            String content = new String(buf.getWrittenBytes(), StandardCharsets.UTF_8);
-            System.out.println(content);
-            client.execute(() -> {
+//        ClientPlayNetworking.registerGlobalReceiver(FLY_MOD_PERMISSIONS_IDENTIFIER, (client, handler, buf, responseSender) -> {
+//            String content = new String(buf.getWrittenBytes(), StandardCharsets.UTF_8);
+//            System.out.println(content);
+//            client.execute(() -> {
 //                FlyModConfigManager.getConfig().isFlyingAllowedInMultiplayer = content.equals("true");
-            });
-        });
+//            });
+//        });
         System.out.println("Registered PluginMessage Listener for " + FLY_MOD_PERMISSIONS_IDENTIFIER);
     }
 }

@@ -63,7 +63,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         } else if (!getAbilities().flying && isActiveForCurrentGamemode() && isActiveForCurrentServer()) {
             Vec3d vec = vec3d;
             if (client.options.sprintKey.isPressed() || client.options.getSprintToggled().getValue()) {
-                if (!FlyModConfigManager.getConfig().overrideExhaustion) {
+                if (!FlyModConfigManager.getConfig().overrideExhaustion || isMultiplayer()) {
                     setSprinting(true);
                     // -0.3 to account for the boost by setSprinting(true)
                     vec = applyRunMultiplier(vec, FlyModConfigManager.getConfig().runSpeedMultiplier - 0.3F);
@@ -105,6 +105,11 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         return (client.getServer() != null && client.getServer().isSingleplayer() && FlyModConfigManager.getConfig().activeInSingleplayer)
                 || (client.getServer() == null && getAbilities().allowFlying);
 //                || (client.getServer() == null && FlyModConfigManager.getConfig().activeInMultiplayer && FlyModConfigManager.getConfig().isFlyingAllowedInMultiplayer);
+    }
+
+    private boolean isMultiplayer() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        return !(client.getServer() != null && client.getServer().isSingleplayer()) && client.getServer() == null;
     }
 
     private Vec3d mouseControlMovement(final Vec3d vec3d, boolean backwards, boolean forwards, boolean left, boolean right) {
@@ -174,9 +179,9 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         }
     }
 
-    private Vec3d verticalMovement(final Vec3d vec3d) {
-        double y = vec3d.getY();
-        double flyUpDownBlocks = FlyModConfigManager.getConfig().flyUpDownBlocks;
+    private Vec3d verticalMovement(final Vec3d moveVector) {
+        double y = moveVector.getY();
+        double flyUpDownBlocks = !isMultiplayer() ? FlyModConfigManager.getConfig().flyUpDownBlocks : 1;
         if (MinecraftClient.getInstance().options.sneakKey.isPressed() && MinecraftClient.getInstance().options.jumpKey.isPressed()) {
             y += 0;
         } else if (MinecraftClient.getInstance().options.sneakKey.isPressed()) {
@@ -184,7 +189,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         } else if (MinecraftClient.getInstance().options.jumpKey.isPressed()) {
             y += flyUpDownBlocks;
         }
-        return new Vec3d(vec3d.getX(), y, vec3d.getZ());
+        return new Vec3d(moveVector.getX(), y, moveVector.getZ());
     }
 
     private Vec3d applyFlyMultiplier(double x, double y, double z) {
@@ -197,11 +202,13 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
         return new Vec3d(x, y, z);
     }
 
-    private Vec3d applyFlyMultiplier(final Vec3d vec3d) {
-        return applyFlyMultiplier(vec3d.getX(), vec3d.getY(), vec3d.getZ());
+    private Vec3d applyFlyMultiplier(final Vec3d moveVector) {
+        if (isMultiplayer()) return moveVector;
+        return applyFlyMultiplier(moveVector.getX(), moveVector.getY(), moveVector.getZ());
     }
 
-    private Vec3d applyRunMultiplier(final Vec3d vec, float multiplier) {
-        return new Vec3d(vec.getX() * multiplier, vec.getY(), vec.getZ() * multiplier);
+    private Vec3d applyRunMultiplier(final Vec3d moveVector, float multiplier) {
+        if (isMultiplayer()) return moveVector;
+        return new Vec3d(moveVector.getX() * multiplier, moveVector.getY(), moveVector.getZ() * multiplier);
     }
 }
