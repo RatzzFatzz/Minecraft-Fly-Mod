@@ -103,7 +103,8 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
     private boolean isActiveForCurrentServer() {
         MinecraftClient client = MinecraftClient.getInstance();
         return (client.getServer() != null && client.getServer().isSingleplayer() && FlyModConfigManager.getConfig().activeInSingleplayer)
-                || (client.getServer() == null && FlyModConfigManager.getConfig().activeInMultiplayer && FlyModConfigManager.getConfig().isFlyingAllowedInMultiplayer);
+                || (client.getServer() == null && getAbilities().allowFlying);
+//                || (client.getServer() == null && FlyModConfigManager.getConfig().activeInMultiplayer && FlyModConfigManager.getConfig().isFlyingAllowedInMultiplayer);
     }
 
     private Vec3d mouseControlMovement(final Vec3d vec3d, boolean backwards, boolean forwards, boolean left, boolean right) {
