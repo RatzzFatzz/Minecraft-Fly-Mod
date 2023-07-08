@@ -76,7 +76,7 @@ public class FlyModConfig {
 
         builder.getOrCreateCategory(ConfigTexts.RUNTIME)
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(CREATIVE_ONLY, config.onlyForCreative).setDefaultValue(false).setSaveConsumer(b -> config.onlyForCreative = b).build())
-                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ACTIVE_IN_MULTIPLAYER, config.activeInMultiplayer).setDefaultValue(false).setSaveConsumer(b -> config.activeInMultiplayer = b).build())
+                .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ACTIVE_IN_MULTIPLAYER, config.activeInMultiplayer).setDefaultValue(true).setSaveConsumer(b -> config.activeInMultiplayer = b).build())
                 .addEntry(ConfigEntryBuilder.create().startBooleanToggle(ACTIVE_IN_SINGLEPLAYER, config.activeInSingleplayer).setDefaultValue(true).setSaveConsumer(b -> config.activeInSingleplayer = b).build());
 
         builder.setSavingRunnable((FlyModConfigManager::save));

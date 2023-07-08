@@ -14,18 +14,13 @@
 
 package at.pcgf.flymod;
 
-import at.pcgf.flymod.gui.FlyModConfigManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
-
-import java.nio.charset.StandardCharsets;
 
 import static at.pcgf.flymod.FlyingState.*;
 
@@ -51,12 +46,12 @@ public class FlyModImpl implements ClientModInitializer {
         System.out.println("Registered key binding for flymod");
 
         // Disable mod for multiplayer, when leaving server
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            System.out.println("Resetting flight permissions...");
-            FlyModConfigManager.getConfig().isFlyingAllowedInMultiplayer = false;
-            FlyModConfigManager.getConfig().isSpeedModifierAllowedInMultiplayer = false;
-        });
-        System.out.println("Registered event resetting permissions after server disconnect.");
+//        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+//            System.out.println("Resetting flight permissions...");
+//            FlyModConfigManager.getConfig().isFlyingAllowedInMultiplayer = false;
+//            FlyModConfigManager.getConfig().isSpeedModifierAllowedInMultiplayer = false;
+//        });
+//        System.out.println("Registered event resetting permissions after server disconnect.");
 
         // Communicate if the player is allowed to use speed modifiers
 //        ClientPlayNetworking.registerGlobalReceiver(FLY_MOD_PERMISSIONS_IDENTIFIER, (client, handler, buf, responseSender) -> {
@@ -66,6 +61,6 @@ public class FlyModImpl implements ClientModInitializer {
 //                FlyModConfigManager.getConfig().isFlyingAllowedInMultiplayer = content.equals("true");
 //            });
 //        });
-        System.out.println("Registered PluginMessage Listener for " + FLY_MOD_PERMISSIONS_IDENTIFIER);
+//        System.out.println("Registered PluginMessage Listener for " + FLY_MOD_PERMISSIONS_IDENTIFIER);
     }
 }
