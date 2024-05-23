@@ -45,7 +45,7 @@ public class FlyModConfigManager {
 
     public static FlyModConfig init() {
         configFile = FabricLoader.getInstance().getConfigDir().resolve("flymod" + ".json");
-        if(! Files.exists(configFile)){
+        if (!Files.exists(configFile)) {
             System.out.println("Creating flymod config file");
             save().join();
         }
@@ -55,9 +55,9 @@ public class FlyModConfigManager {
 
     public static CompletableFuture<FlyModConfig> load() {
         return CompletableFuture.supplyAsync(() -> {
-            try(BufferedReader reader = Files.newBufferedReader(configFile)){
+            try (BufferedReader reader = Files.newBufferedReader(configFile)) {
                 return GSON.fromJson(reader, FlyModConfig.class);
-            }catch(IOException | JsonParseException e){
+            } catch (IOException | JsonParseException e) {
                 System.err.println("Unable to read flymod config, restoring defaults");
                 save();
                 return new FlyModConfig();
@@ -68,9 +68,9 @@ public class FlyModConfigManager {
     public static CompletableFuture<Void> save() {
         return CompletableFuture.runAsync(() -> {
             config = Optional.ofNullable(config).orElseGet(FlyModConfig::new);
-            try(BufferedWriter writer = Files.newBufferedWriter(configFile)){
+            try (BufferedWriter writer = Files.newBufferedWriter(configFile)) {
                 GSON.toJson(config, writer);
-            }catch(IOException | JsonIOException e){
+            } catch (IOException | JsonIOException e) {
                 System.err.println("Failed to write flymod config file");
             }
         }, EXECUTOR);

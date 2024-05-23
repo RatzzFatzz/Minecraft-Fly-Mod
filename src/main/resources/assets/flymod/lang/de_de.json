@@ -1,14 +1,23 @@
 {
   "text.flymod.title": "Fly Mod Einstellungen",
-  "text.flymod.category.default": "Allgemein",
-  "text.flymod.option.mouseControl": "Ein / Aus von Maussteuerung",
-  "text.flymod.option.creativeOnly": "Nur im Kreativ-Modus verwenden",
-  "text.flymod.option.flyUpDownBlocks": "Anzahl an Blöcken die pro Tick hoch- / runtergeflogen wird",
+
+  "text.flymod.category.modifiers": "Steuerung",
+  "text.flymod.option.mouseControl": "Maussteuerung aktivirien",
+  "text.flymod.option.flyUpDownBlocks": "Blöcke die pro Tick hoch- / runtergeflogen wird",
   "text.flymod.option.flySpeedMultiplier": "Fluggeschwindigkeitsmultiplikator",
-  "text.flymod.option.runSpeedMultiplier": "Renngeschwindigkeitsmultiplikator",
+  "text.flymod.option.runSpeedMultiplier": "Sprintgeschwindigkeitsmultiplikator",
   "text.flymod.option.multiplyUpDown": "Hoch- / runterfliegen mit Sprinttaste erhöhen (Um Faktor des Flugmultiplikators)",
   "text.flymod.option.fadeMovement": "Bewegungen beim Fliegen langsam verringern (Funktioniert nur wenn Maussteuerung deaktiviert ist)",
-  "text.flymod.option.overrideExhaustion": "Überschreibe Hunger (kein erhöhten Hunger beim Sprinten)",
+  "text.flymod.option.overrideExhaustion": "Keine Erschöpfung durch Sprinten",
+
+  "text.flymod.category.runtime": "Verwendung",
+  "text.flymod.option.creativeOnly": "Nur im Kreativ-Modus verwenden",
+  "text.flymod.option.activeInMultiplayer": "Aktiv in Multiplayer",
+  "text.flymod.option.activeInSingleplayer": "Aktiv in Singleplayer",
+
   "key.flymod.keybinding": "Fly Mod",
-  "key.flymod.toggle": "FlyMod umschalten"
+  "key.flymod.toggle": "FlyMod umschalten",
+
+  "flymod.modrinth": "Modrinth",
+  "flymod.curseforge": "Curseforge"
 }

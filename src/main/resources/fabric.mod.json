@@ -1,13 +1,20 @@
 {
   "schemaVersion": 1,
   "id": "flymod",
-  "version": "${version}",
-  "name": "Fly Mod",
-  "description": "This Mod allows you to enable a 3D fly and let you customize the fly and run speed.",
+  "version": "1.8.2",
+  "name": "Fly Mod 3D",
+  "description": "Control flying by looking into a direction. Provides speed modifier.",
   "authors": [
-    "MarkusWME",
     "RatzzFatzz"
   ],
+  "contributors": ["MarkusWME", "davinci-tech"],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/fly-mod-3d",
+    "issues": "https://github.com/RatzzFatzz/Minecraft-Fly-Mod/issues",
+    "sources": "https://github.com/RatzzFatzz/Minecraft-Fly-Mod"
+  },
+  "icon": "icon.png",
+  "environment": "client",
   "mixins": [
     "flymod.mixin.json"
   ],
@@ -24,5 +31,14 @@
     "fabric": ">=0.92.0",
     "minecraft": ">=1.20.6",
     "cloth-config2": ">=14.0.122"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "flymod.curseforge": "https://legacy.curseforge.com/minecraft/mc-mods/fly-mod-3d",
+        "flymod.modrinth": "https://modrinth.com/mod/fly-mod-3d"
+      },
+      "update_checker": true
+    }
   }
 }

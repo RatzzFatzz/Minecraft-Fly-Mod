@@ -1,28 +1,46 @@
 # Minecraft - Fly-Mod
+
 This Mod for Minecraft allows you to enable a 3D fly and let you customize the fly and run speed.
 
 ## Requirements
-* Any of the listed Minecraft versions
-    * 1.14.4
-    * 1.15.1 & 1.15.2
-    * 1.16.1 - 1.16.5
-    * 1.17 - 1.17.1
-    * 1.18.2
-    * 1.19
-    * 1.20
+
+| Minecraft Version | Java     | Mod Version     |
+|-------------------|----------|-----------------|
+| 1.14.4            | 8 or up  | v1.2            |
+| 1.15.1            | 8 or up  | v1.3            |
+| 1.15.2            | 8 or up  | v1.4            |
+| 1.16.2 - 1.16.5   | 8 or up  | v1.5.1 - v1.7.1 |
+| 1.17              | 16 or up | v1.7 - v1.7.2   |
+| 1.18              | 17 or up | v1.8            |
+| 1.19              | 17 or up | v1.8 - v1.8.1   |
+| 1.20              | 17 or up | v1.8.1 - v2     |
+
 * Fabric
-* (Recommended) Mod Menu
+* Mod Menu
 * Cloth Config
-* Java 8 (up to Minecraft 1.16)
-* Java 16 (for Minecraft 1.17)
-* Java 17 (for Minecraft 1.18 and later)
 
 ## Supported languages
+
 * Deutsch / German
 * English
 
 ## External links
+
 This mod is also available on:
+
 - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/fly-mod-3d)
 - [Modrinth](https://modrinth.com/mod/fly-mod-3d)
 
+## Contribution
+
+### Requirements
+
+* Gradle
+* Java JDK (according to above table)
+
+### Build from source
+
+```shell
+git clone https://github.com/RatzzFatzz/Minecraft-Fly-Mod.git
+gradle build
+```

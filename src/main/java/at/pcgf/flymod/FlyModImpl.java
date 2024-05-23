@@ -19,12 +19,12 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 import static at.pcgf.flymod.FlyingState.*;
 
 public class FlyModImpl implements ClientModInitializer {
-    public static FlyingState flyingState = NOT_FLYING;
     public static final String MOD_ID = "flymod";
     private static final KeyBinding flyKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.flymod.toggle",
@@ -32,13 +32,35 @@ public class FlyModImpl implements ClientModInitializer {
             GLFW.GLFW_KEY_B,
             "key.flymod.keybinding"
     ));
+    private static final Identifier FLY_MOD_PERMISSIONS_IDENTIFIER = new Identifier("flymod", "permissions");
+    public static FlyingState flyingState = NOT_FLYING;
 
     @Override
     public void onInitializeClient() {
+        // Keybind registration
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if(flyKey.wasPressed()) {
+            if (flyKey.wasPressed()) {
                 flyingState = flyingState == FLYING ? NEUTRAL : FLYING;
             }
         });
+        System.out.println("Registered key binding for flymod");
+
+        // Disable mod for multiplayer, when leaving server
+//        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+//            System.out.println("Resetting flight permissions...");
+//            FlyModConfigManager.getConfig().isFlyingAllowedInMultiplayer = false;
+//            FlyModConfigManager.getConfig().isSpeedModifierAllowedInMultiplayer = false;
+//        });
+//        System.out.println("Registered event resetting permissions after server disconnect.");
+
+        // Communicate if the player is allowed to use speed modifiers
+//        ClientPlayNetworking.registerGlobalReceiver(FLY_MOD_PERMISSIONS_IDENTIFIER, (client, handler, buf, responseSender) -> {
+//            String content = new String(buf.getWrittenBytes(), StandardCharsets.UTF_8);
+//            System.out.println(content);
+//            client.execute(() -> {
+//                FlyModConfigManager.getConfig().isFlyingAllowedInMultiplayer = content.equals("true");
+//            });
+//        });
+//        System.out.println("Registered PluginMessage Listener for " + FLY_MOD_PERMISSIONS_IDENTIFIER);
     }
 }
