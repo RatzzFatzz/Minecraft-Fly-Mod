@@ -12,11 +12,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       - name: Setup workspace
         run: mkdir artifacts
