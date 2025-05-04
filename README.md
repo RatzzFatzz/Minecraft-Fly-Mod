@@ -14,6 +14,7 @@ This Mod for Minecraft allows you to enable a 3D fly and let you customize the f
 | 1.18              | 17 or up | v1.8            |
 | 1.19              | 17 or up | v1.8 - v1.8.1   |
 | 1.20              | 17 or up | v1.8.1 - v2     |
+| 1.21.5            | 17 or up | v2              |
 
 * Fabric
 * Mod Menu

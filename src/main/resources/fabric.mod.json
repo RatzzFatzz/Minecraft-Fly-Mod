@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "flymod",
-  "version": "1.8.2",
+  "version": "2.0.0",
   "name": "Fly Mod 3D",
   "description": "Control flying by looking into a direction. Provides speed modifier.",
   "authors": [
@@ -27,10 +27,10 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.15.9",
-    "fabric": ">=0.92.0",
-    "minecraft": ">=1.20.6",
-    "cloth-config2": ">=14.0.122"
+    "fabricloader": ">=0.16.9",
+    "fabric": ">=0.122",
+    "minecraft": ">=1.21.5",
+    "cloth-config2": ">=18.0.145"
   },
   "custom": {
     "modmenu": {

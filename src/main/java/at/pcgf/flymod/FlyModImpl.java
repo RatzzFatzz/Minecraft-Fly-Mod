@@ -32,7 +32,7 @@ public class FlyModImpl implements ClientModInitializer {
             GLFW.GLFW_KEY_B,
             "key.flymod.keybinding"
     ));
-    private static final Identifier FLY_MOD_PERMISSIONS_IDENTIFIER = new Identifier("flymod", "permissions");
+    private static final Identifier FLY_MOD_PERMISSIONS_IDENTIFIER = Identifier.of("flymod", "permissions");
     public static FlyingState flyingState = NOT_FLYING;
 
     @Override

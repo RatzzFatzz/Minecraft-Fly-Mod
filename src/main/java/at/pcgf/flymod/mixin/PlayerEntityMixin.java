@@ -114,8 +114,8 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
 
     private Vec3d mouseControlMovement(final Vec3d vec3d, boolean backwards, boolean forwards, boolean left, boolean right) {
         if (FlyModConfigManager.getConfig().mouseControl) {
-            float pitch = prevPitch;
-            float yaw = prevYaw;
+            float pitch = lastPitch;
+            float yaw = lastYaw;
             final Vector4f directionsVector = new Vector4f(
                     (backwards ? 1 : 0) - (forwards ? 1 : 0),
                     0,
