@@ -16,7 +16,7 @@ ext {
     fabric_version = '0.136.0+1.21.10'
 
     cloth_config_version = '18.0.145'
-    mod_menu_version = '14.0.0-rc.2'
+    mod_menu_version = '16.0.0-rc.1'
 }
 
 group = 'at.pcgf.flymod'
