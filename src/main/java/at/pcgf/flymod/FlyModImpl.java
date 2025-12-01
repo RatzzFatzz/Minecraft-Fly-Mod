@@ -30,7 +30,7 @@ public class FlyModImpl implements ClientModInitializer {
             "key.flymod.toggle",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_B,
-            "key.flymod.keybinding"
+            KeyBinding.Category.create(Identifier.of("key.flymod.keybinding"))
     ));
     private static final Identifier FLY_MOD_PERMISSIONS_IDENTIFIER = Identifier.of("flymod", "permissions");
     public static FlyingState flyingState = NOT_FLYING;

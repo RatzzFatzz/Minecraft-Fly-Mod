@@ -37,7 +37,9 @@ import static org.joml.Math.sin;
 public abstract class PlayerEntityMixin extends PlayerEntity {
 
     public PlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
-        super(world, pos, yaw, gameProfile);
+        super(world, gameProfile);
+        setPos(pos.getX(), pos.getY(), pos.getZ());
+        setYaw(yaw);
     }
 
     @Override
@@ -175,7 +177,7 @@ public abstract class PlayerEntityMixin extends PlayerEntity {
             return;
         }
         if (!isMoving && !FlyModConfigManager.getConfig().fadeMovement) {
-            setVelocityClient(0.0, 0.0, 0.0);
+            setVelocityClient(new Vec3d(0.0, 0.0, 0.0));
         }
     }
 

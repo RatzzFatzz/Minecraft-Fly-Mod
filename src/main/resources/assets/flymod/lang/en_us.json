@@ -15,7 +15,7 @@
   "text.flymod.option.activeInMultiplayer": "Enabled in Multiplayer",
   "text.flymod.option.activeInSingleplayer": "Enabled in Singleplayer",
 
-  "key.flymod.keybinding": "Fly Mod",
+  "key.category.minecraft.key.flymod.keybinding": "Fly Mod",
   "key.flymod.toggle": "Toggle Fly Mod",
 
   "flymod.modrinth": "Modrinth",

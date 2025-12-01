@@ -1,31 +1,27 @@
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '1.11.0-alpha.9'
+    id 'fabric-loom' version '1.13.6'
 }
 
 wrapper {
-    gradleVersion = '8.14'
+    gradleVersion = '9.2.1'
 }
 
 ext {
     mod_version = '2.0'
-    minecraft_version = '1.21.5'
+    minecraft_version = '1.21.10'
 
-
-    yarn_mappings = '1.21.5-rc2+build.1'
-    loader_version = '0.16.9'
-    fabric_version = '0.122.0+1.21.5'
+    yarn_mappings = '1.21.10-rc1+build.2'
+    loader_version = '0.18.0'
+    fabric_version = '0.136.0+1.21.10'
 
     cloth_config_version = '18.0.145'
     mod_menu_version = '14.0.0-rc.2'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = 'flymod'
-version = "${mod_version}-${minecraft_version}"
 group = 'at.pcgf.flymod'
+base.archivesName = "flymod"
+version = "${mod_version}-${minecraft_version}"
 
 repositories {
     mavenCentral()
@@ -59,14 +55,8 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
     it.options.encoding = "UTF-8"
-
-    // Minecraft 1.17 (21w19a) upwards uses Java 16.
-    it.options.release = 21
+    it.options.release = 17
 }
 
 java {
